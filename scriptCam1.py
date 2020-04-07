@@ -318,7 +318,7 @@ while(True):
     # ##print("a")
     # try:
     ret, img=cap.read()
-    print("count",count)
+    print("count",count1)
     print("time",datetime.now().strftime("%H:%M:%S"))
     if(img  is not None):
         # if ((cv2.waitKey(20) & 0xFF == ord('q')) | (int(t2(20,00).strftime("%H%M"))<int(datetime.now().strftime("%H%M")))):
