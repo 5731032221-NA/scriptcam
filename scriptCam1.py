@@ -320,6 +320,8 @@ while(True):
     # ##print("a")
     # try:
     ret, img=cap.read()
+    if(count1 = 60):
+        cv2.imwrite("data/"+count1, img)
     # print("count",count1)
     # print("time",datetime.now().strftime("%H:%M:%S"))
     # if(img  is not None):
