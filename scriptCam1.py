@@ -84,7 +84,7 @@ container_name = "facedetection"
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 # cap = cv2.VideoCapture(   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov")
 # cap = cv2.VideoCapture("20200108v2.mp4")
-cap = cv2.VideoCapture("rtsp://10.76.53.14")
+cap = cv2.VideoCapture("rtsp://10.76.53.14/play1.sdp")
 
 
 
