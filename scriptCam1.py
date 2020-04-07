@@ -262,20 +262,20 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
     
 
 
-def imagescan(img, count):
-    print("cc",count)
+def imagescan(frame, count):
+    # print("cc",count)
     if (count % 30) == 0:
         print("count",count)
         #time.sleep(count/60)
         # frame=resize(img)
-        frame = img
+        # frame = img
         gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces=face_cascade.detectMultiScale(gray, 1.1, 4)
         if(len(faces) > 0):
             now=datetime.now() + timedelta(hours=7)
             today=date.today()
             current_time=now.strftime("%H%M%S")
-            name=str(today)+"1-"+current_time+str(randint(0, 100))+".jpg"
+            name=str(today)+"-1-"+current_time+".jpg"
             cv2.imwrite("data/"+name, frame)
 
             storeblob(name)
@@ -320,8 +320,8 @@ while(True):
     # ##print("a")
     # try:
     ret, img=cap.read()
-    if(count1 == 60):
-        cv2.imwrite("data/"+str(count1)+".jpg", img)
+    # if(count1 == 60):
+    #     cv2.imwrite("data/"+str(count1)+".jpg", img)
     # print("count",count1)
     # print("time",datetime.now().strftime("%H:%M:%S"))
     # if(img  is not None):
