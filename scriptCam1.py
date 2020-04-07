@@ -263,7 +263,8 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
 
 
 def imagescan(img, count):
-    if (count % 60) == 0:
+    if (count % 1000) == 0:
+        print("count",count)
         #time.sleep(count/60)
         # frame=resize(img)
         frame = img
@@ -318,21 +319,21 @@ while(True):
     # ##print("a")
     # try:
     ret, img=cap.read()
-    print("count",count1)
-    print("time",datetime.now().strftime("%H:%M:%S"))
-    if(img  is not None):
+    # print("count",count1)
+    # print("time",datetime.now().strftime("%H:%M:%S"))
+    # if(img  is not None):
         # if ((cv2.waitKey(20) & 0xFF == ord('q')) | (int(t2(20,00).strftime("%H%M"))<int(datetime.now().strftime("%H%M")))):
-        if (cv2.waitKey(20) & 0xFF == ord('q')):
+    if (cv2.waitKey(20) & 0xFF == ord('q')):
             break
         # if (cv2.waitKey(20) & 0xFF == ord('q')) | (not ret):
         #     break
         # asyncio.run(imagescan(img, count1))
         # executor.submit(asyncio.run(imagescan(img, count1)))
         # executor.submit(imagescan(img, count1))
-        _thread.start_new_thread(imagescan, (img, count1))
-        count1=count1 + 1
-    else:
-        count1=count1 + 1
+    _thread.start_new_thread(imagescan, (img, count1))
+    count1=count1 + 1
+    # else:
+    #     count1=count1 + 1
 	# except Exception as ex:
     #     count1=count1 + 1
     #     pass
