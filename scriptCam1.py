@@ -264,7 +264,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
 
 def imagescan(img, count):
     print("cc",count)
-    if (count % 1000) == 0:
+    if (count % 30) == 0:
         print("count",count)
         #time.sleep(count/60)
         # frame=resize(img)
