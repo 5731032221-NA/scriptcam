@@ -216,7 +216,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
             "mongodb://127.0.0.1:27017")
     db = client.checkin
     emo = getemo(faceAttributes['emotion'])
-    query = {"name": nameperson}
+    query = {"id": nameperson}
     queryy = db.checkin[today].find(query)
     if(queryy.count() > 0):
         newvalues = { "$set": { "checkout": checkin ,"checkoutEmotion": faceAttributes} }
@@ -225,7 +225,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
         db.checkin[today].update(
         query,
         {
-            "name": nameperson,
+            "id": nameperson,
             "checkin": checkin,
             "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
             "checkinMonth": today.strftime("%Y-%m"),
@@ -244,7 +244,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
             upsert=True
         )   
         db.checkattendance.insert_one({
-        "name": nameperson,
+        "id": nameperson,
         "checkin": { "time": now.strftime("%H:%M:%S"),
                      "emotion": faceAttributes
         },
