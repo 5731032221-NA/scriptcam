@@ -32,6 +32,14 @@ now=datetime.now()
 
 current_time=now.strftime("%H%M%S")
 
+blob_service_client = BlobServiceClient.from_connection_string(
+    "DefaultEndpointsProtocol=https;AccountName=oneteamblob;AccountKey=qcv7bSwg5vFNZRt1gY9XLPcv6OWKdKakKCj5znpUQRNQTPAOkLbhnCuZpt/1m4Gc9f5tV55x0CEzcVWjCubTaQ==;EndpointSuffix=core.windows.net")
+
+# Create a unique name for the container
+container_name = "facedetection"
+cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
+
+
 def storeblob(name):
     print(name)
     blob_client = blob_service_client.get_blob_client(
