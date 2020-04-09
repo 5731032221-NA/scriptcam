@@ -82,6 +82,9 @@ container_name = "facedetection"
 # headers = {'Content-type': 'multipart/form-data', 'Accept': 'application/json'}
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+left_eye_cascade = cv2.CascadeClassifier('haarcascade_lefteye_2splits.xml')
+right_eye_cascade = cv2.CascadeClassifier('haarcascade_righteye_2splits.xml')
+
 # cap = cv2.VideoCapture(   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov")
 # cap = cv2.VideoCapture("20200108v2.mp4")
 cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
@@ -271,42 +274,52 @@ def imagescan(frame, count):
         # frame = img
         gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces=face_cascade.detectMultiScale(gray, 1.1, 4)
-        if(len(faces) > 0):
-            now=datetime.now() + timedelta(hours=7)
-            today=date.today()
-            current_time=now.strftime("%H%M%S")
-            name=str(today)+"-1-"+current_time+".jpg"
-            cv2.imwrite("data/"+name, frame)
+        for (x, y, w, h) in faces:
+            roi_gray = gray[y:y+h, x:x+w]
+            roi_color = img[y:y+h, x:x+w]
+            eyel = left_eye_cascade.detectMultiScale(roi_gray)
+        #     for (ex,ey,ew,eh) in eyel:
+        #         cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
+            eyer = right_eye_cascade.detectMultiScale(roi_gray)
+        #     for (ex,ey,ew,eh) in eyer:
+        #         cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,0,255),2)
+            if((eyel is not ()) and (eyer is not ())):
+            # if(len(faces) > 0):
+                now=datetime.now() + timedelta(hours=7)
+                today=date.today() + timedelta(hours=7)
+                current_time=now.strftime("%H%M%S")
+                name=str(today)+"-1-"+current_time+".jpg"
+                cv2.imwrite("data/"+name, frame)
 
-            storeblob(name)
+                storeblob(name)
 
-            response=apidetect(name)
-            detect=response.json()
-            
-            if(detect != []):
-                arrfaceid=[]
-                for face in detect:
-                    arrfaceid.append(face[u'faceId'])
-                response=apiidentify(name, arrfaceid)
-                identify=response.json()
-                for index, iden in enumerate(identify):
-                    uriPerson='https://southeastasia.api.cognitive.microsoft.com/face/v1.0/persongroups/oneteam/persons/' + \
-                        str(json.dumps(identify[0][u'candidates'][0][u'personId'])).replace(
-                            '"', '')
-                    header={'Ocp-Apim-Subscription-Key': subscription_key}
-                    crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
-                                        3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                    name_crop=str(today)+"1-"+current_time+str(randint(0, 100))+"-crop.jpg"
-                    cv2.imwrite("data/"+name_crop, crop_img)
-                    storecrop(name_crop)
-                    person=requests.get(uriPerson,  headers = header)
-                    nameperson=person.json()[u'name']
+                response=apidetect(name)
+                detect=response.json()
+                
+                if(detect != []):
+                    arrfaceid=[]
+                    for face in detect:
+                        arrfaceid.append(face[u'faceId'])
+                    response=apiidentify(name, arrfaceid)
+                    identify=response.json()
+                    for index, iden in enumerate(identify):
+                        uriPerson='https://southeastasia.api.cognitive.microsoft.com/face/v1.0/persongroups/oneteam/persons/' + \
+                            str(json.dumps(identify[0][u'candidates'][0][u'personId'])).replace(
+                                '"', '')
+                        header={'Ocp-Apim-Subscription-Key': subscription_key}
+                        crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
+                                            3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
+                        name_crop=str(today)+"1-"+current_time+str(randint(0, 100))+"-crop.jpg"
+                        cv2.imwrite("data/"+name_crop, crop_img)
+                        storecrop(name_crop)
+                        person=requests.get(uriPerson,  headers = header)
+                        nameperson=person.json()[u'name']
 
-                    mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-                        "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                    os.remove("data/"+name_crop)
-                    
-            os.remove("data/"+name)
+                        mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
+                            "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
+                        os.remove("data/"+name_crop)
+                        
+                os.remove("data/"+name)
         
 now=datetime.now()
 

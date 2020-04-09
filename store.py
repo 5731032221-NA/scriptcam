@@ -52,9 +52,9 @@ def imagescan(frame, count):
     # print("cc",count)
     if (count % 30) == 0:
         now=datetime.now() + timedelta(hours=7)
-        today=date.today()
+        today=date.today() + timedelta(hours=7)
         current_time=now.strftime("%H%M%S")
-        name=str(today)+"-1-"+current_time+".jpg"
+        name=str(today)+"-1-"+current_time+"test.jpg"
         print("count",count)
         cv2.imwrite("data/"+name, frame)
         storeblob(name)
