@@ -56,6 +56,7 @@ def imagescan(frame, count):
         current_time=now.strftime("%H%M%S")
         name=str(today)+"-1-"+current_time+".jpg"
         print("count",count)
+        cv2.imwrite("data/"+name, frame)
         storeblob(name)
 
 count1=1
