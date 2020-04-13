@@ -351,7 +351,7 @@ def imagescan(frame, count):
                     response=apiidentify(name, arrfaceid)
                     identify=response.json()
                     for index, iden in enumerate(identify):
-                        uriPerson='https://southeastasia.api.cognitive.microsoft.com/face/v1.0/persongroups/oneteam/persons/' + \
+                        uriPerson='https://meafacedetection.cognitiveservices.azure.com/face/v1.0/persongroups/mea/persons/' + \
                             str(json.dumps(identify[0][u'candidates'][0][u'personId'])).replace(
                                 '"', '')
                         header={'Ocp-Apim-Subscription-Key': subscription_key}
