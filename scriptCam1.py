@@ -28,7 +28,7 @@ from datetime import  timedelta, datetime, date, time as t2
 import time
 from random import randint
 # set to your own subscription key value
-subscription_key = '8b1838e13407455daf92a98bd51016ba'
+subscription_key = '99d0310d30c24046a148cbf795a34121'
 # key = Random.new().read(AES.block_size)
 # iv = Random.new().read(AES.block_size)
 # import sys
@@ -140,15 +140,15 @@ def storecrop(name):
 
 def apiidentify(name, arrfaceid):
 
-    identify_url = 'https://southeastasia.api.cognitive.microsoft.com/face/v1.0/identify'
+    identify_url = 'https://meafacedetection.cognitiveservices.azure.com/face/v1.0/identify'
     header = {'Ocp-Apim-Subscription-Key': subscription_key}
-    paramsIden = json.loads('{ "personGroupId": "oneteam", "faceIds": '+json.dumps(
+    paramsIden = json.loads('{ "personGroupId": "mea", "faceIds": '+json.dumps(
         arrfaceid)+',"confidenceThreshold": 0.1, "maxNumOfCandidatesReturned": 1 }')
     return requests.post(identify_url,  headers=header, json=paramsIden)
 
 
 def apidetect(name):
-    face_api_url = 'https://southeastasia.api.cognitive.microsoft.com/face/v1.0/detect'
+    face_api_url = 'https://meafacedetection.cognitiveservices.azure.com/face/v1.0/detect'
 
     image_url = "https://oneteamblob.blob.core.windows.net/facedetection/"+name
     headers = {'Ocp-Apim-Subscription-Key': subscription_key}
@@ -156,7 +156,8 @@ def apidetect(name):
     params = {
         'returnFaceId': 'true',
         'returnFaceLandmarks': 'true',
-        'returnFaceAttributes': 'emotion,gender,age,blur',
+        # 'returnFaceAttributes': 'emotion,gender,age,blur',
+        'detectionModel': 'detection_02',
     }
     return requests.post(
         face_api_url, params=params, headers=headers, json={"url": image_url})
@@ -260,6 +261,53 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
         )
 
 
+def mongo(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
+    today = date.today()
+    client = pymongo.MongoClient(
+            "mongodb://127.0.0.1:27017")
+    db = client.checkin
+    # emo = getemo(faceAttributes['emotion'])
+    query = {"id": nameperson}
+    queryy = db.checkin[today].find(query)
+    if(queryy.count() > 0):
+        newvalues = { "$set": { "checkout": checkin } }
+
+    else:
+        db.checkin[today].update(
+        query,
+        {
+            "id": nameperson,
+            "checkin": checkin,
+            "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
+            "checkinMonth": today.strftime("%Y-%m"),
+            # "checkinEmotion": faceAttributes,
+            # "checkinEmo": emo,
+            "checkinImageCrop": imageCropUrl,
+            "camerain": 1,
+            "checkout": "",
+            "checkoutEmotion": {"gender":"","age":0},
+            "checkoutEmo": "",
+            "checkoutImageCrop": "",
+            "cameraout": 0,
+            "checkoutdatetime": "",
+            "checkoutMonth":""
+        },
+            upsert=True
+        )   
+        db.checkattendance.insert_one({
+        "id": nameperson,
+        "checkin": { "time": now.strftime("%H:%M:%S"),
+                    #  "emotion": faceAttributes
+        },
+        "checkout": { "time": "",
+                     "emotion": ""
+        },
+        "Date":  now.strftime("%Y-%m-%d"),
+        # "faceAttributes": faceAttributes
+        }
+        )
+
+
    
 
     
@@ -315,8 +363,11 @@ def imagescan(frame, count):
                         person=requests.get(uriPerson,  headers = header)
                         nameperson=person.json()[u'name']
 
-                        mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-                            "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
+                        # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
+                        #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
+                        mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
+                             "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
+                        
                         os.remove("data/"+name_crop)
                         
                 os.remove("data/"+name)
