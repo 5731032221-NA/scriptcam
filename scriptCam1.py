@@ -155,7 +155,7 @@ def apidetect(name):
 
     params = {
         'returnFaceId': 'true',
-        'returnFaceLandmarks': 'true',
+        # 'returnFaceLandmarks': 'true',
         # 'returnFaceAttributes': 'emotion,gender,age,blur',
         'detectionModel': 'detection_02',
     }
