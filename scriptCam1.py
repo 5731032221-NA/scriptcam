@@ -146,8 +146,23 @@ def apiidentify(name, arrfaceid):
         arrfaceid)+',"confidenceThreshold": 0.1, "maxNumOfCandidatesReturned": 1 }')
     return requests.post(identify_url,  headers=header, json=paramsIden)
 
-
 def apidetect(name):
+    face_api_url = 'https://meafacedetection.cognitiveservices.azure.com/face/v1.0/detect'
+
+    image_url = "https://oneteamblob.blob.core.windows.net/facedetection/"+name
+    headers = {'Ocp-Apim-Subscription-Key': subscription_key}
+
+    params = {
+        'returnFaceId': 'true',
+        'returnFaceLandmarks': 'true',
+        'returnFaceAttributes': 'emotion,gender,age,blur',
+        
+    }
+    return requests.post(
+        face_api_url, params=params, headers=headers, json={"url": image_url})
+
+
+def apidetect2(name):
     face_api_url = 'https://meafacedetection.cognitiveservices.azure.com/face/v1.0/detect'
 
     image_url = "https://oneteamblob.blob.core.windows.net/facedetection/"+name
@@ -357,7 +372,7 @@ def imagescan(frame, count):
                         header={'Ocp-Apim-Subscription-Key': subscription_key}
                         crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                             3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                        name_crop=str(today)+"1-"+current_time+str(randint(0, 100))+"-crop.jpg"
+                        name_crop=str(today)+"-1-"+current_time+str(randint(0, 100))+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop)
                         person=requests.get(uriPerson,  headers = header)
@@ -369,7 +384,36 @@ def imagescan(frame, count):
                              "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                         
                         os.remove("data/"+name_crop)
-                        
+                else:
+                    response=apidetect2(name)
+                    detect=response.json()
+                    
+                    if(detect != []):
+                        arrfaceid=[]
+                        for face in detect:
+                            arrfaceid.append(face[u'faceId'])
+                        response=apiidentify(name, arrfaceid)
+                        identify=response.json()
+                        for index, iden in enumerate(identify):
+                            uriPerson='https://meafacedetection.cognitiveservices.azure.com/face/v1.0/persongroups/mea/persons/' + \
+                                str(json.dumps(identify[0][u'candidates'][0][u'personId'])).replace(
+                                    '"', '')
+                            header={'Ocp-Apim-Subscription-Key': subscription_key}
+                            crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
+                                                3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
+                            name_crop=str(today)+"-1-"+current_time+str(randint(0, 100))+"-crop.jpg"
+                            cv2.imwrite("data/"+name_crop, crop_img)
+                            storecrop(name_crop)
+                            person=requests.get(uriPerson,  headers = header)
+                            nameperson=person.json()[u'name']
+
+                            # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
+                            #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
+                            mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
+                                "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
+                            
+                            os.remove("data/"+name_crop)
+
                 os.remove("data/"+name)
         
 now=datetime.now()
@@ -377,35 +421,15 @@ now=datetime.now()
 current_time=now.strftime("%H%M%S")
 
 
-# #print(int(t2(12, 30).strftime("%H%M")) > int(datetime.now().strftime("%H%M")))
 count1=1
-# executor = concurrent.futures.ThreadPoolExecutor(max_workers=8)
 while(True):
-    # ##print("a")
-    # try:
     ret, img=cap.read()
-    # if(count1 == 60):
-    #     cv2.imwrite("data/"+str(count1)+".jpg", img)
-    # print("count",count1)
-    # print("time",datetime.now().strftime("%H:%M:%S"))
-    # if(img  is not None):
-        # if ((cv2.waitKey(20) & 0xFF == ord('q')) | (int(t2(20,00).strftime("%H%M"))<int(datetime.now().strftime("%H%M")))):
+
     if (cv2.waitKey(20) & 0xFF == ord('q')):
             break
-        # if (cv2.waitKey(20) & 0xFF == ord('q')) | (not ret):
-        #     break
-        # asyncio.run(imagescan(img, count1))
-        # executor.submit(asyncio.run(imagescan(img, count1)))
-        # executor.submit(imagescan(img, count1))
     _thread.start_new_thread(imagescan, (img, count1))
     count1=count1 + 1
-    # else:
-    #     count1=count1 + 1
-	# except Exception as ex:
-    #     count1=count1 + 1
-    #     pass
 
 cap.release()
 cv2.destroyAllWindows()
 
-# sys.stdout = sys.__stdout__
