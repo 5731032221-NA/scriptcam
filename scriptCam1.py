@@ -295,8 +295,8 @@ def mongo(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl
             "checkin": checkin,
             "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
             "checkinMonth": today.strftime("%Y-%m"),
-            # "checkinEmotion": faceAttributes,
-            # "checkinEmo": emo,
+            "checkinEmotion": { "gender": "female", "age": 19, "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
+            "checkinEmo": "neutral",
             "checkinImageCrop": imageCropUrl,
             "camerain": 1,
             "checkout": "",
@@ -309,18 +309,18 @@ def mongo(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl
         },
             upsert=True
         )   
-        db.checkattendance.insert_one({
-        "id": nameperson,
-        "checkin": { "time": now.strftime("%H:%M:%S"),
-                    #  "emotion": faceAttributes
-        },
-        "checkout": { "time": "",
-                     "emotion": ""
-        },
-        "Date":  now.strftime("%Y-%m-%d"),
-        # "faceAttributes": faceAttributes
-        }
-        )
+        # db.checkattendance.insert_one({
+        # "id": nameperson,
+        # "checkin": { "time": now.strftime("%H:%M:%S"),
+        #              "emotion": faceAttributes
+        # },
+        # "checkout": { "time": "",
+        #              "emotion": ""
+        # },
+        # "Date":  now.strftime("%Y-%m-%d"),
+        # # "faceAttributes": faceAttributes
+        # }
+        # )
 
 
    
@@ -378,10 +378,10 @@ def imagescan(frame, count):
                         person=requests.get(uriPerson,  headers = header)
                         nameperson=person.json()[u'name']
 
-                        # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-                        #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                        mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
-                             "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
+                        mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
+                            "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
+                        # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
+                        #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                         
                         os.remove("data/"+name_crop)
                 else:
