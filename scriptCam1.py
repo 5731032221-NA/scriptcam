@@ -330,7 +330,7 @@ def mongo(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl
 
 def imagescan(frame, count):
     # print("cc",count)
-    if (count % 15) == 0:
+    if (count % 26) == 0:
         print("count",count)
         #time.sleep(count/60)
         # frame=resize(img)
