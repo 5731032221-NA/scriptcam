@@ -276,7 +276,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
         )
 
 
-def mongo(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
+def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
     today = date.today()
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
@@ -409,7 +409,7 @@ def imagescan(frame, count):
 
                             # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                             #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                            mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
+                            mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                 "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                             
                             os.remove("data/"+name_crop)
