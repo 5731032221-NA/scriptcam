@@ -278,6 +278,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
 
 def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
     today = date.today()
+    year_today = int(today.year)
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
     db = client.checkin
@@ -288,6 +289,10 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
         newvalues = { "$set": { "checkout": checkin } }
 
     else:
+        db_default = client.mea
+        query_default = {"id": nameperson}
+        default_data = db_default.default.find_one(query_default)
+        print(default_data)
         db.checkin[today].update(
         query,
         {
@@ -295,7 +300,7 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
             "checkin": checkin,
             "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
             "checkinMonth": today.strftime("%Y-%m"),
-            "checkinEmotion": { "gender": "female", "age": 19, "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
+            "checkinEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
             "checkinEmo": "neutral",
             "checkinImageCrop": imageCropUrl,
             "camerain": 1,
@@ -309,18 +314,19 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
         },
             upsert=True
         )   
-        # db.checkattendance.insert_one({
-        # "id": nameperson,
-        # "checkin": { "time": now.strftime("%H:%M:%S"),
-        #              "emotion": faceAttributes
-        # },
-        # "checkout": { "time": "",
-        #              "emotion": ""
-        # },
-        # "Date":  now.strftime("%Y-%m-%d"),
-        # # "faceAttributes": faceAttributes
-        # }
-        # )
+
+        db.checkattendance.insert_one({
+        "id": nameperson,
+        "checkin": { "time": now.strftime("%H:%M:%S"),
+                     "emotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
+        },
+        "checkout": { "time": "",
+                     "emotion": ""
+        },
+        "Date":  now.strftime("%Y-%m-%d"),
+        "faceAttributes": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
+        }
+        )
 
 
    
