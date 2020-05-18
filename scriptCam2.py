@@ -231,7 +231,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
                         "emotion": faceAttributes
             }} }) 
 
-def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
+def mongo2(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
     today = date.today()
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")

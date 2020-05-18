@@ -292,7 +292,7 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
         db_default = client.mea
         query_default = {"id": nameperson}
         default_data = db_default.default.find_one(query_default)
-        print(default_data)
+        # print(default_data)
         db.checkin[today].update(
         query,
         {
