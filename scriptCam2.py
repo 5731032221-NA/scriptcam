@@ -56,30 +56,9 @@ blob_service_client = BlobServiceClient.from_connection_string(
 
 # Create a unique name for the container
 container_name = "facedetection"
+# count2 = 1
+#print("cap")
 
-# Create the container
-# container_client = blob_service_client.create_container(container_name)
-
-# Create a file in local Documents directory to upload and download
-# local_path = "./data"
-# local_file_name = "quickstart" + str(uuid.uuid4()) + ".txt"
-# upload_file_path = os.path.join(local_path, local_file_name)
-
-# Write text to the file
-# file = open(upload_file_path, 'w')
-# file.write("Hello, World!")
-# file.close()
-
-# Create a blob client using the local file name as the name for the blob
-# blob_client = blob_service_client.get_blob_client(container=container_name, blob=local_file_name)
-
-# Upload the created file
-# with open(upload_file_path, "rb") as data:
-# blob_client.upload_blob(data)
-
-# import requests
-# url = 'http://1teamapi.azurewebsites.net/upload'
-# headers = {'Content-type': 'multipart/form-data', 'Accept': 'application/json'}
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 left_eye_cascade = cv2.CascadeClassifier('haarcascade_lefteye_2splits.xml')
@@ -237,102 +216,20 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
     emo = getemo(faceAttributes['emotion'])
     query = {"id": nameperson}
     queryy = db.checkin[today].find(query)
-    if(queryy.count() > 0):
-        newvalues = { "$set": { "checkout": checkin ,"checkoutEmotion": faceAttributes} }
-
-    else:
-        db.checkin[today].update(
-        query,
-        {
-            "id": nameperson,
-            "checkin": checkin,
-            "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
-            # "checkinMonth": today.strftime("%Y-%m"),
-            "checkinEmotion": faceAttributes,
-            "checkinEmo": emo,
-            "checkinImageCrop": imageCropUrl,
-            "camerain": 1,
-            "checkout": "",
-            "checkoutEmotion": {"gender":"","age":0},
-            "checkoutEmo": "",
-            "checkoutImageCrop": "",
-            "cameraout": 0,
-            "checkoutdatetime": "",
-            # "checkoutMonth":""
-        },
-            upsert=True
-        )   
-        db.checkattendance.insert_one({
-        "id": nameperson,
-        "checkin": { "time": now.strftime("%H:%M:%S"),
-                     "emotion": faceAttributes
-        },
-        "checkout": { "time": "",
-                     "emotion": ""
-        },
-        "Date":  now.strftime("%Y-%m-%d"),
-        "faceAttributes": faceAttributes
-        }
-        )
-
-
-def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
-    today = date.today()
-    year_today = int(today.year)
-    client = pymongo.MongoClient(
-            "mongodb://127.0.0.1:27017")
-    db = client.checkin
-    # emo = getemo(faceAttributes['emotion'])
-    query = {"id": nameperson}
-    queryy = db.checkin[today].find(query)
-    if(queryy.count() > 0):
-        newvalues = { "$set": { "checkout": checkin } }
-
-    else:
-        db_default = client.mea
-        query_default = {"id": nameperson}
-        default_data = db_default.default.find_one(query_default)
-        print(default_data)
-        db.checkin[today].update(
-        query,
-        {
-            "id": nameperson,
-            "checkin": checkin,
-            "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
-            "checkinMonth": today.strftime("%Y-%m"),
-            "checkinEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
-            "checkinEmo": "neutral",
-            "checkinImageCrop": imageCropUrl,
-            "camerain": 1,
-            "checkout": "",
-            "checkoutEmotion": {"gender":"","age":0},
-            "checkoutEmo": "",
-            "checkoutImageCrop": "",
-            "cameraout": 0,
-            "checkoutdatetime": "",
-            "checkoutMonth":""
-        },
-            upsert=True
-        )   
-
-        db.checkattendance.insert_one({
-        "id": nameperson,
-        "checkin": { "time": now.strftime("%H:%M:%S"),
-                     "emotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
-        },
-        "checkout": { "time": "",
-                     "emotion": ""
-        },
-        "Date":  now.strftime("%Y-%m-%d"),
-        "faceAttributes": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
-        }
-        )
-
-
-   
-
+    # # ##print(queryy.count())
     
 
+
+    if(queryy.count() > 0):
+        if(queryy[0]['cameraout'] > 0):    
+            tr = 1
+        else: 
+            newvalues = { "$set": { "cameraout": 2,"checkout": checkin ,"checkoutEmotion": faceAttributes,"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
+            db.checkin[today].update_one(query, newvalues)
+
+            db.checkattendance.update_one(query, { "$set": {"checkout": { "time": now.strftime("%H:%M:%S"),
+                        "emotion": faceAttributes
+            }} }) 
 
 def imagescan(frame, count):
     # print("cc",count)
@@ -421,21 +318,31 @@ def imagescan(frame, count):
                             os.remove("data/"+name_crop)
 
                 os.remove("data/"+name)
-        
+
+
+
 now=datetime.now()
 
 current_time=now.strftime("%H%M%S")
 
 
+#print(int(t2(12, 30).strftime("%H%M")) > int(datetime.now().strftime("%H%M")))
 count1=1
+# executor = concurrent.futures.ThreadPoolExecutor(max_workers=8)
 while(True):
+    # ##print("a")
+    
     ret, img=cap.read()
-
+    # if ((cv2.waitKey(20) & 0xFF == ord('q')) | (int(t2(20,00).strftime("%H%M"))<int(datetime.now().strftime("%H%M")))):
     if (cv2.waitKey(20) & 0xFF == ord('q')):
-            break
+        break
+    # if (cv2.waitKey(20) & 0xFF == ord('q')) | (not ret):
+    #     break
+    # asyncio.run(imagescan(img, count1))
+    # executor.submit(asyncio.run(imagescan(img, count1)))
+    # executor.submit(imagescan(img, count1))
     _thread.start_new_thread(imagescan, (img, count1))
     count1=count1 + 1
-
+    
 cap.release()
 cv2.destroyAllWindows()
-
