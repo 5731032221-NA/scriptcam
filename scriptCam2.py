@@ -66,7 +66,7 @@ right_eye_cascade = cv2.CascadeClassifier('haarcascade_righteye_2splits.xml')
 
 # cap = cv2.VideoCapture(   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov")
 # cap = cv2.VideoCapture("20200108v2.mp4")
-cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
+cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.15:8554/stream0/out.h264")
 
 
 
@@ -221,18 +221,19 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
 
 
     if(queryy.count() > 0):
-        if(queryy[0]['cameraout'] > 0):    
-            tr = 1
-        else: 
-            newvalues = { "$set": { "cameraout": 2,"checkout": checkin ,"checkoutEmotion": faceAttributes,"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
-            db.checkin[today].update_one(query, newvalues)
+        # if(queryy[0]['cameraout'] > 0):    
+        #     tr = 1
+        # else: 
+        newvalues = { "$set": { "cameraout": 2,"checkout": checkin ,"checkoutEmotion": faceAttributes,"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
+        db.checkin[today].update_one(query, newvalues)
 
-            db.checkattendance.update_one(query, { "$set": {"checkout": { "time": now.strftime("%H:%M:%S"),
-                        "emotion": faceAttributes
-            }} }) 
+        db.checkattendance.update_one(query, { "$set": {"checkout": { "time": now.strftime("%H:%M:%S"),
+                    "emotion": faceAttributes
+        }} }) 
 
 def mongo2(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
     today = date.today()
+    year_today = int(today.year)
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
     db = client.checkin
@@ -244,23 +245,23 @@ def mongo2(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_
 
 
     if(queryy.count() > 0):
-        if(queryy[0]['cameraout'] > 0):    
-            tr = 1
-        else: 
-            db_default = client.mea
-            query_default = {"id": nameperson}
-            default_data = db_default.default.find_one(query_default)
-            
-            newvalues = { "$set": { "cameraout": 2,"checkout": checkin ,"checkoutEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
-            db.checkin[today].update_one(query, newvalues)
+        # if(queryy[0]['cameraout'] > 0):    
+        #     tr = 1
+        # else: 
+        db_default = client.mea
+        query_default = {"id": nameperson}
+        default_data = db_default.default.find_one(query_default)
+        
+        newvalues = { "$set": { "cameraout": 2,"checkout": checkin ,"checkoutEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
+        db.checkin[today].update_one(query, newvalues)
 
-            db.checkattendance.update_one(query, { "$set": {"checkout": { "time": now.strftime("%H:%M:%S"),
-                        "emotion": faceAttributes
-            }} }) 
+        db.checkattendance.update_one(query, { "$set": {"checkout": { "time": now.strftime("%H:%M:%S"),
+                    "emotion": faceAttributes
+        }} }) 
 
 def imagescan(frame, count):
     # print("cc",count)
-    if (count % 26) == 0:
+    if (count % 13) == 0:
         print("count",count)
         #time.sleep(count/60)
         # frame=resize(img)
@@ -281,7 +282,7 @@ def imagescan(frame, count):
                 now=datetime.now() + timedelta(hours=7)
                 today=date.today() + timedelta(hours=7)
                 current_time=now.strftime("%H%M%S")
-                name=str(today)+"-2-"+current_time+".jpg"
+                name=str(today)+"-2-"+current_time+str(count%60)+".jpg"
                 cv2.imwrite("data/"+name, frame)
 
                 storeblob(name)
@@ -302,7 +303,7 @@ def imagescan(frame, count):
                         header={'Ocp-Apim-Subscription-Key': subscription_key}
                         crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                             3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                        name_crop=str(today)+"-2-"+current_time+str(randint(0, 100))+"-crop.jpg"
+                        name_crop=str(today)+"-2-"+current_time+str(count%60)+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop)
                         person=requests.get(uriPerson,  headers = header)
@@ -331,7 +332,7 @@ def imagescan(frame, count):
                             header={'Ocp-Apim-Subscription-Key': subscription_key}
                             crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                                 3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                            name_crop=str(today)+"-2-"+current_time+str(randint(0, 100))+"-crop.jpg"
+                            name_crop=str(today)+"-2-"+current_time+str(count%60)+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop)
                             person=requests.get(uriPerson,  headers = header)

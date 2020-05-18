@@ -87,7 +87,7 @@ right_eye_cascade = cv2.CascadeClassifier('haarcascade_righteye_2splits.xml')
 
 # cap = cv2.VideoCapture(   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov")
 # cap = cv2.VideoCapture("20200108v2.mp4")
-cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
+cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.16:8554/stream0/out.h264")
 
 
 
@@ -251,7 +251,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
             "checkinEmotion": faceAttributes,
             "checkinEmo": emo,
             "checkinImageCrop": imageCropUrl,
-            "camerain": 1,
+            "camerain": 3,
             "checkout": "",
             "checkoutEmotion": {"gender":"","age":0},
             "checkoutEmo": "",
@@ -303,7 +303,7 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
             "checkinEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
             "checkinEmo": "neutral",
             "checkinImageCrop": imageCropUrl,
-            "camerain": 1,
+            "camerain": 3,
             "checkout": "",
             "checkoutEmotion": {"gender":"","age":0},
             "checkoutEmo": "",
@@ -357,7 +357,7 @@ def imagescan(frame, count):
                 now=datetime.now() + timedelta(hours=7)
                 today=date.today() + timedelta(hours=7)
                 current_time=now.strftime("%H%M%S")
-                name=str(today)+"-1-"+current_time+str(count%60)+".jpg"
+                name=str(today)+"-3-"+current_time+str(count%60)+".jpg"
                 cv2.imwrite("data/"+name, frame)
 
                 storeblob(name)
@@ -378,7 +378,7 @@ def imagescan(frame, count):
                         header={'Ocp-Apim-Subscription-Key': subscription_key}
                         crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                             3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                        name_crop=str(today)+"-1-"+current_time+str(count%60)+"-crop.jpg"
+                        name_crop=str(today)+"-3-"+current_time+str(count%60)+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop)
                         person=requests.get(uriPerson,  headers = header)
@@ -407,7 +407,7 @@ def imagescan(frame, count):
                             header={'Ocp-Apim-Subscription-Key': subscription_key}
                             crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                                 3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                            name_crop=str(today)+"-1-"+current_time+str(count%60)+"-crop.jpg"
+                            name_crop=str(today)+"-3-"+current_time+str(count%60)+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop)
                             person=requests.get(uriPerson,  headers = header)
