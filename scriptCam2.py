@@ -281,7 +281,7 @@ def imagescan(frame, count):
                 now=datetime.now() + timedelta(hours=7)
                 today=date.today() + timedelta(hours=7)
                 current_time=now.strftime("%H%M%S")
-                name=str(today)+"-1-"+current_time+".jpg"
+                name=str(today)+"-2-"+current_time+".jpg"
                 cv2.imwrite("data/"+name, frame)
 
                 storeblob(name)
@@ -302,7 +302,7 @@ def imagescan(frame, count):
                         header={'Ocp-Apim-Subscription-Key': subscription_key}
                         crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                             3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                        name_crop=str(today)+"-1-"+current_time+str(randint(0, 100))+"-crop.jpg"
+                        name_crop=str(today)+"-2-"+current_time+str(randint(0, 100))+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop)
                         person=requests.get(uriPerson,  headers = header)
@@ -331,7 +331,7 @@ def imagescan(frame, count):
                             header={'Ocp-Apim-Subscription-Key': subscription_key}
                             crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                                 3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                            name_crop=str(today)+"-1-"+current_time+str(randint(0, 100))+"-crop.jpg"
+                            name_crop=str(today)+"-2-"+current_time+str(randint(0, 100))+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop)
                             person=requests.get(uriPerson,  headers = header)
