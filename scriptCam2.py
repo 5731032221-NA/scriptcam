@@ -231,6 +231,33 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
                         "emotion": faceAttributes
             }} }) 
 
+def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
+    today = date.today()
+    client = pymongo.MongoClient(
+            "mongodb://127.0.0.1:27017")
+    db = client.checkin
+    emo = getemo(faceAttributes['emotion'])
+    query = {"id": nameperson}
+    queryy = db.checkin[today].find(query)
+    # # ##print(queryy.count())
+    
+
+
+    if(queryy.count() > 0):
+        if(queryy[0]['cameraout'] > 0):    
+            tr = 1
+        else: 
+            db_default = client.mea
+            query_default = {"id": nameperson}
+            default_data = db_default.default.find_one(query_default)
+            
+            newvalues = { "$set": { "cameraout": 2,"checkout": checkin ,"checkoutEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
+            db.checkin[today].update_one(query, newvalues)
+
+            db.checkattendance.update_one(query, { "$set": {"checkout": { "time": now.strftime("%H:%M:%S"),
+                        "emotion": faceAttributes
+            }} }) 
+
 def imagescan(frame, count):
     # print("cc",count)
     if (count % 26) == 0:
