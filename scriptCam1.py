@@ -251,7 +251,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
             "checkin": checkin,
             "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
             # "checkinMonth": today.strftime("%Y-%m"),
-            "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] },
+            "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
             "checkinEmo": emo,
             "checkinImageCrop": imageCropUrl,
             "camerain": 1,
@@ -268,7 +268,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
         db.checkattendance.insert_one({
         "id": nameperson,
         "checkin": { "time": now.strftime("%H:%M:%S"),
-                     "emotion": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] }
+                     "emotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] }
         },
         "checkout": { "time": "",
                      "emotion": ""
