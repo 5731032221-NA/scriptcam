@@ -224,11 +224,14 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
         # if(queryy[0]['cameraout'] > 0):    
         #     tr = 1
         # else: 
-        newvalues = { "$set": { "cameraout": 2,"checkout": checkin ,"checkoutEmotion": faceAttributes,"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
+        db_default = client.mea
+        query_default = {"id": nameperson}
+        default_data = db_default.default.find_one(query_default)
+        newvalues = { "$set": { "cameraout": 2,"checkout": checkin ,"checkoutEmotion": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] },"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
         db.checkin[today].update_one(query, newvalues)
 
         db.checkattendance.update_one(query, { "$set": {"checkout": { "time": now.strftime("%H:%M:%S"),
-                    "emotion": faceAttributes
+                    "emotion": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] }
         }} }) 
 
 def mongo2(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
@@ -277,7 +280,7 @@ def imagescan(frame, count):
             eyer = right_eye_cascade.detectMultiScale(roi_gray)
         #     for (ex,ey,ew,eh) in eyer:
         #         cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,0,255),2)
-            if((eyel is not ()) and (eyer is not ())):
+            if((eyel is not ()) or (eyer is not ())):
             # if(len(faces) > 0):
                 now=datetime.now() + timedelta(hours=7)
                 today=date.today() + timedelta(hours=7)

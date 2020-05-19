@@ -241,6 +241,9 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
         newvalues = { "$set": { "checkout": checkin ,"checkoutEmotion": faceAttributes} }
 
     else:
+        db_default = client.mea
+        query_default = {"id": nameperson}
+        default_data = db_default.default.find_one(query_default)
         db.checkin[today].update(
         query,
         {
@@ -248,7 +251,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
             "checkin": checkin,
             "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
             # "checkinMonth": today.strftime("%Y-%m"),
-            "checkinEmotion": faceAttributes,
+            "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] },
             "checkinEmo": emo,
             "checkinImageCrop": imageCropUrl,
             "camerain": 1,
@@ -265,13 +268,13 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
         db.checkattendance.insert_one({
         "id": nameperson,
         "checkin": { "time": now.strftime("%H:%M:%S"),
-                     "emotion": faceAttributes
+                     "emotion": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] }
         },
         "checkout": { "time": "",
                      "emotion": ""
         },
         "Date":  now.strftime("%Y-%m-%d"),
-        "faceAttributes": faceAttributes
+        # "faceAttributes": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] }
         }
         )
 
@@ -352,7 +355,7 @@ def imagescan(frame, count):
             eyer = right_eye_cascade.detectMultiScale(roi_gray)
         #     for (ex,ey,ew,eh) in eyer:
         #         cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,0,255),2)
-            if((eyel is not ()) and (eyer is not ())):
+            if((eyel is not ()) or (eyer is not ())):
             # if(len(faces) > 0):
                 now=datetime.now() + timedelta(hours=7)
                 today=date.today() + timedelta(hours=7)
