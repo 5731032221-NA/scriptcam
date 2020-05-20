@@ -377,7 +377,7 @@ def imagescan(frame, count):
 # now=datetime.now() + timedelta(hours=7)
 
 # current_time=now.strftime("%H%M%S")
-print((int(t2(20,00).strftime("%H%M"))<int( (datetime.now() + timedelta(hours=7)).strftime("%H%M")) ))
+# print((int(t2(20,00).strftime("%H%M"))<int( (datetime.now() + timedelta(hours=7)).strftime("%H%M")) ))
 
 #print(int(t2(12, 30).strftime("%H%M")) > int(datetime.now().strftime("%H%M")))
 count1=1
@@ -386,7 +386,7 @@ while(True):
     # ##print("a")
     
     ret, img=cap.read()
-    if ((cv2.waitKey(20) & 0xFF == ord('q')) | (int(t2(20,00).strftime("%H%M"))<int((datetime.now() + timedelta(hours=7))).strftime("%H%M"))):
+    if ((cv2.waitKey(20) & 0xFF == ord('q')) | (int(t2(20,00).strftime("%H%M"))<int( (datetime.now() + timedelta(hours=7)).strftime("%H%M")) )):
     # if (cv2.waitKey(20) & 0xFF == ord('q')):
         break
     # if (cv2.waitKey(20) & 0xFF == ord('q')) | (not ret):
