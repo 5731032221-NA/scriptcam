@@ -243,7 +243,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
 
 def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
     today = now.strftime("%Y-%m-%d")
-    year_today = int(today.year)
+    year_today = int(now.strftime("%Y"))
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
     db = client.checkin
