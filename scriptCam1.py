@@ -409,7 +409,9 @@ def imagescan(frame, count):
                                 "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                             # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                             #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                        
+                            infocrop(name_crop,now,nameperson) 
+                        else:
+                            infocrop(name_crop,now,"") 
                         os.remove("data/"+name_crop)
                 else:
                     response=apidetect2(name)
@@ -440,7 +442,9 @@ def imagescan(frame, count):
                                 #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                            
+                                infocrop(name_crop,now,nameperson) 
+                            else:
+                                infocrop(name_crop,now,"") 
                             os.remove("data/"+name_crop)
 
                 os.remove("data/"+name)
