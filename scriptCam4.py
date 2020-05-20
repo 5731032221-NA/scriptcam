@@ -217,7 +217,7 @@ def getemo(emotion):
     return emostr
 
 def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
-    today = date.today()
+    today = now.strftime("%Y-%m-%d")
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
     db = client.checkin
@@ -242,7 +242,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
         }} }) 
 
 def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
-    today = date.today()
+    today = now.strftime("%Y-%m-%d")
     year_today = int(today.year)
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
@@ -290,9 +290,9 @@ def imagescan(frame, count):
             if((eyel is not ()) or (eyer is not ())):
             # if(len(faces) > 0):
                 now=datetime.now() + timedelta(hours=7)
-                today=date.today() + timedelta(hours=7)
+                #today=date.today() + timedelta(hours=7)
                 current_time=now.strftime("%H%M%S")
-                name=str(today)+"-4-"+current_time+str(count%60)+".jpg"
+                name=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+".jpg"
                 cv2.imwrite("data/"+name, frame)
 
                 storeblob(name)
@@ -313,7 +313,7 @@ def imagescan(frame, count):
                         header={'Ocp-Apim-Subscription-Key': subscription_key}
                         crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                             3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                        name_crop=str(today)+"-4-"+current_time+str(count%60)+"-crop.jpg"
+                        name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop,now)
                         if(identify[index][u'candidates'][0][u'confidence'] > 0.5):
@@ -343,7 +343,7 @@ def imagescan(frame, count):
                             header={'Ocp-Apim-Subscription-Key': subscription_key}
                             crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                                 3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                            name_crop=str(today)+"-4-"+current_time+str(count%60)+"-crop.jpg"
+                            name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop,now)
                             person=requests.get(uriPerson,  headers = header)
