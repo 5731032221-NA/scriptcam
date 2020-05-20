@@ -91,13 +91,13 @@ cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.16:8554/stream0/out.h264")
 
 
 
-def resize(img):
-    scale_percent = 80  # percent of original size
-    width = int(img.shape[1] * scale_percent / 100)
-    height = int(img.shape[0] * scale_percent / 100)
-    dim = (width, height)
+# def resize(img):
+#     scale_percent = 80  # percent of original size
+#     width = int(img.shape[1] * scale_percent / 100)
+#     height = int(img.shape[0] * scale_percent / 100)
+#     dim = (width, height)
 
-    return cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
+#     return cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
 
 def storeblob(name):
     print(name)
@@ -238,7 +238,7 @@ def getemo(emotion):
     return emostr
 
 def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
-    today = date.today()
+    today = now.strftime("%Y-%m-%d")
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
     db = client.checkin
@@ -288,7 +288,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
 
 
 def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
-    today = date.today()
+    today = now.strftime("%Y-%m-%d")
     year_today = int(today.year)
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
@@ -347,7 +347,7 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
 
 def imagescan(frame, count):
     # print("cc",count)
-    if (count % 13) == 0:
+    if (count % 26) == 0:
         print("count",count)
         #time.sleep(count/60)
         # frame=resize(img)

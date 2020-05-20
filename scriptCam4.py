@@ -70,13 +70,13 @@ cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.17:8554/stream0/out.h264")
 
 
 
-def resize(img):
-    scale_percent = 80  # percent of original size
-    width = int(img.shape[1] * scale_percent / 100)
-    height = int(img.shape[0] * scale_percent / 100)
-    dim = (width, height)
+# def resize(img):
+#     scale_percent = 80  # percent of original size
+#     width = int(img.shape[1] * scale_percent / 100)
+#     height = int(img.shape[0] * scale_percent / 100)
+#     dim = (width, height)
 
-    return cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
+#     return cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
 
 def storeblob(name):
     print(name)
@@ -271,7 +271,7 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
 
 def imagescan(frame, count):
     # print("cc",count)
-    if (count % 13) == 0:
+    if (count % 26) == 0:
         print("count",count)
         #time.sleep(count/60)
         # frame=resize(img)
