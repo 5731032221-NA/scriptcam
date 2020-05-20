@@ -133,16 +133,22 @@ def storecrop(name,now):
     }
     )
 
-    db2 = client.cropinfo
-    db2.data.insert_one({
-        "name": name,
-        "data": img_enc_str,
-        "date": now.strftime("%Y%m%d%H%M%S")
-    }
-    )
+
     
 
-
+def infocrop(name,now,detectname):
+    client = pymongo.MongoClient(
+            "mongodb://127.0.0.1:27017")
+    db2 = client.cropinfo
+    db2.data.insert_one({
+        "date": now.strftime("%Y-%m-%d"),
+        "time": now.strftime("%H:%M"),
+        "name": name,
+        "datetime": now.strftime("%Y%m%d%H%M%S"),
+        "detected": detectname,
+        "train": ''
+    }
+    )
 
 
 
@@ -401,7 +407,9 @@ def imagescan(frame, count):
                                 "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                             # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                         #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                        
+                            infocrop(name_crop,now,nameperson) 
+                        else:
+                            infocrop(name_crop,now,"") 
                         os.remove("data/"+name_crop)
                 else:
                     response=apidetect2(name)
@@ -432,7 +440,9 @@ def imagescan(frame, count):
                                 #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                                
+                                infocrop(name_crop,now,nameperson) 
+                            else:
+                                infocrop(name_crop,now,"") 
                             os.remove("data/"+name_crop)
 
                 os.remove("data/"+name)
@@ -446,7 +456,7 @@ count1=1
 while(True):
     ret, img=cap.read()
 
-    if (cv2.waitKey(20) & 0xFF == ord('q')):
+    if (cv2.waitKey(20) & 0xFF == ord('q')  | (int(t2(20,00).strftime("%H%M"))<int((datetime.now() + timedelta(hours=7))).strftime("%H%M"))):
             break
     _thread.start_new_thread(imagescan, (img, count1))
     count1=count1 + 1

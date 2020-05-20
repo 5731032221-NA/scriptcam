@@ -133,15 +133,21 @@ def storecrop(name,now):
     }
     )
 
+
+    
+def infocrop(name,now,detectname):
+    client = pymongo.MongoClient(
+            "mongodb://127.0.0.1:27017")
     db2 = client.cropinfo
     db2.data.insert_one({
+        "date": now.strftime("%Y-%m-%d"),
+        "time": now.strftime("%H:%M"),
         "name": name,
-        "data": img_enc_str,
-        "date": now.strftime("%Y%m%d%H%M%S")
+        "datetime": now.strftime("%Y%m%d%H%M%S"),
+        "detected": detectname,
+        "train": ''
     }
     )
-    
-
 
 
 
@@ -448,7 +454,7 @@ count1=1
 while(True):
     ret, img=cap.read()
 
-    if (cv2.waitKey(20) & 0xFF == ord('q')):
+    if (cv2.waitKey(20) & 0xFF == ord('q')  | (int(t2(20,00).strftime("%H%M"))<int((datetime.now() + timedelta(hours=7))).strftime("%H%M"))):
             break
     _thread.start_new_thread(imagescan, (img, count1))
     count1=count1 + 1
