@@ -316,7 +316,7 @@ def imagescan(frame, count):
                         name_crop=str(today)+"-2-"+current_time+str(count%60)+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop,now)
-                        if(identify[index][u'candidates'][0][u'confidence'] > 0.5)
+                        if(identify[index][u'candidates'][0][u'confidence'] > 0.5):
     
                             person=requests.get(uriPerson,  headers = header)
                             nameperson=person.json()[u'name']
@@ -347,7 +347,7 @@ def imagescan(frame, count):
                             name_crop=str(today)+"-2-"+current_time+str(count%60)+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop,now)
-                            if(identify[index][u'candidates'][0][u'confidence'] > 0.5)
+                            if(identify[index][u'candidates'][0][u'confidence'] > 0.5):
     
                                 person=requests.get(uriPerson,  headers = header)
                                 nameperson=person.json()[u'name']
