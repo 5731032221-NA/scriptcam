@@ -241,7 +241,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
                     "emotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] }
         }} }) 
 
-def mongo2(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
+def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
     today = date.today()
     year_today = int(today.year)
     client = pymongo.MongoClient(
