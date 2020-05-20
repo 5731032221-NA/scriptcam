@@ -366,7 +366,7 @@ def imagescan(frame, count):
             if((eyel is not ()) or (eyer is not ())):
             # if(len(faces) > 0):
                 now=datetime.now() + timedelta(hours=7)
-                today=date.today() + timedelta(hours=7)
+                # today=date.today() + timedelta(hours=7)
                 current_time=now.strftime("%H%M%S")
                 name=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+".jpg"
                 cv2.imwrite("data/"+name, frame)
