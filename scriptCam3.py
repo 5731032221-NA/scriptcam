@@ -457,8 +457,9 @@ while(True):
     ret, img=cap.read()
 
     if (cv2.waitKey(20) & 0xFF == ord('q')  | (int(t2(20,00).strftime("%H%M"))<int( (datetime.now() + timedelta(hours=7)).strftime("%H%M")) )):
-            break
-    _thread.start_new_thread(imagescan, (img, count1))
+        break
+    if ret:
+        _thread.start_new_thread(imagescan, (img, count1))
     count1=count1 + 1
 
 cap.release()

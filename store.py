@@ -72,13 +72,14 @@ while(True):
     # if(img  is not None):
         # if ((cv2.waitKey(20) & 0xFF == ord('q')) | (int(t2(20,00).strftime("%H%M"))<int(datetime.now().strftime("%H%M")))):
     if (cv2.waitKey(20) & 0xFF == ord('q')):
-            break
+        break
         # if (cv2.waitKey(20) & 0xFF == ord('q')) | (not ret):
         #     break
         # asyncio.run(imagescan(img, count1))
         # executor.submit(asyncio.run(imagescan(img, count1)))
         # executor.submit(imagescan(img, count1))
-    _thread.start_new_thread(imagescan, (img, count1))
+    if ret:
+        _thread.start_new_thread(imagescan, (img, count1))
     count1=count1 + 1
     # else:
     #     count1=count1 + 1

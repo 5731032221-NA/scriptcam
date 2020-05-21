@@ -390,7 +390,8 @@ while(True):
     # asyncio.run(imagescan(img, count1))
     # executor.submit(asyncio.run(imagescan(img, count1)))
     # executor.submit(imagescan(img, count1))
-    _thread.start_new_thread(imagescan, (img, count1))
+    if ret:
+        _thread.start_new_thread(imagescan, (img, count1))
     count1=count1 + 1
     
 cap.release()
