@@ -63,7 +63,7 @@ container_name = "facedetection"
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 left_eye_cascade = cv2.CascadeClassifier('haarcascade_lefteye_2splits.xml')
 right_eye_cascade = cv2.CascadeClassifier('haarcascade_righteye_2splits.xml')
-
+frontalface_alt = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 # cap = cv2.VideoCapture(   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov")
 # cap = cv2.VideoCapture("20200108v2.mp4")
 cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.15:8554/stream0/out.h264")
@@ -114,7 +114,7 @@ def storecrop(name,now):
 
 
 
-def infocrop(name,now,detectname):
+def infocrop(name,now,detectname,confidence):
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
     db2 = client.cropinfo
@@ -124,6 +124,7 @@ def infocrop(name,now,detectname):
         "name": name,
         "datetime": now.strftime("%Y%m%d%H%M%S"),
         "detected": detectname,
+        "confidence": confidence,
         "train": ''
     }
     )
@@ -332,9 +333,9 @@ def imagescan(frame, count):
 
                             mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                 "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                            infocrop(name_crop,now,nameperson) 
+                            infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                         else:
-                            infocrop(name_crop,now,"")  
+                            infocrop(name_crop,now,"",0)  
 
                         os.remove("data/"+name_crop)
                 else:
@@ -366,9 +367,9 @@ def imagescan(frame, count):
                                 #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                                infocrop(name_crop,now,nameperson) 
+                                infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                             else:
-                                infocrop(name_crop,now,"") 
+                                infocrop(name_crop,now,"",0) 
                             os.remove("data/"+name_crop)
                     
                 os.remove("data/"+name)
@@ -415,9 +416,9 @@ def imagescan(frame, count):
 
                                 mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                                infocrop(name_crop,now,nameperson) 
+                                infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                             else:
-                                infocrop(name_crop,now,"")  
+                                infocrop(name_crop,now,"",0)  
 
                             os.remove("data/"+name_crop)
                     else:
@@ -449,9 +450,9 @@ def imagescan(frame, count):
                                     #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                     mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                         "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                                    infocrop(name_crop,now,nameperson) 
+                                    infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                 else:
-                                    infocrop(name_crop,now,"") 
+                                    infocrop(name_crop,now,"",0) 
                                 os.remove("data/"+name_crop)
                         
                     os.remove("data/"+name)
