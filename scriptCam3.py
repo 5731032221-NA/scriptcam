@@ -259,39 +259,40 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
         db_default = client.mea
         query_default = {"id": nameperson}
         default_data = db_default.default.find_one(query_default)
-        db.checkin[today].update(
-        query,
-        {
+        if(default_data['gender'] == faceAttributes['gender']):
+            db.checkin[today].update(
+            query,
+            {
+                "id": nameperson,
+                "checkin": checkin,
+                "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
+                # "checkinMonth": today.strftime("%Y-%m"),
+                "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
+                "checkinEmo": emo,
+                "checkinImageCrop": imageCropUrl,
+                "camerain": 3,
+                "checkout": "",
+                "checkoutEmotion": {"gender":"","age":0},
+                "checkoutEmo": "",
+                "checkoutImageCrop": "",
+                "cameraout": 0,
+                "checkoutdatetime": "",
+                # "checkoutMonth":""
+            },
+                upsert=True
+            )   
+            db.checkattendance.insert_one({
             "id": nameperson,
-            "checkin": checkin,
-            "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
-            # "checkinMonth": today.strftime("%Y-%m"),
-            "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
-            "checkinEmo": emo,
-            "checkinImageCrop": imageCropUrl,
-            "camerain": 3,
-            "checkout": "",
-            "checkoutEmotion": {"gender":"","age":0},
-            "checkoutEmo": "",
-            "checkoutImageCrop": "",
-            "cameraout": 0,
-            "checkoutdatetime": "",
-            # "checkoutMonth":""
-        },
-            upsert=True
-        )   
-        db.checkattendance.insert_one({
-        "id": nameperson,
-        "checkin": { "time": now.strftime("%H:%M:%S"),
-                     "emotion": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] }
-        },
-        "checkout": { "time": "",
-                     "emotion": ""
-        },
-        "Date":  now.strftime("%Y-%m-%d"),
-        # "faceAttributes": faceAttributes
-        }
-        )
+            "checkin": { "time": now.strftime("%H:%M:%S"),
+                        "emotion": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] }
+            },
+            "checkout": { "time": "",
+                        "emotion": ""
+            },
+            "Date":  now.strftime("%Y-%m-%d"),
+            # "faceAttributes": faceAttributes
+            }
+            )
 
 
 def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
@@ -358,27 +359,29 @@ def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, i
     db_default = client.mea
     query_default = {"id": nameperson}
     default_data = db_default.default.find_one(query_default)
-    db2.detect[today].update(
-        query,
-        {
-            "id": nameperson,
-            "checkin": checkin,
-            "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
-            # "checkinMonth": today.strftime("%Y-%m"),
-            "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
-            "checkinEmo": emo,
-            "checkinImageCrop": imageCropUrl,
-            "camerain": 3,
-            "checkout": "",
-            "checkoutEmotion": {"gender":"","age":0},
-            "checkoutEmo": "",
-            "checkoutImageCrop": "",
-            "cameraout": 0,
-            "checkoutdatetime": "",
-            # "checkoutMonth":""
-        },
-            upsert=True
-        )   
+    if(default_data['gender'] == faceAttributes['gender']):
+        db2.detect[today].update(
+            query,
+            {
+                "id": nameperson,
+                "checkin": checkin,
+                "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
+                # "checkinMonth": today.strftime("%Y-%m"),
+                "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
+                "checkinEmo": emo,
+                "checkinImageCrop": imageCropUrl,
+                "camerain": 3,
+                "checkout": "",
+                "checkoutEmotion": {"gender":"","age":0},
+                "checkoutEmo": "",
+                "checkoutImageCrop": "",
+                "cameraout": 0,
+                "checkoutdatetime": "",
+                # "checkoutMonth":""
+            },
+                upsert=True
+            ) 
+        
     
 def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
     client = pymongo.MongoClient(
