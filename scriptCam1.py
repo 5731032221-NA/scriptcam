@@ -419,31 +419,31 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
         upsert=True
     )
 
-def mongodetectlower5(now,timei, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
-    client = pymongo.MongoClient(
-            "mongodb://127.0.0.1:27017")
-    today = now.strftime("%Y-%m-%d")
-    db2 = client.detect
-    emo = getemo(faceAttributes['emotion'])
-    db2.detect[today].insert_one(
-    {
-      "id": "-",
-        "checkin": checkin,
-        "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
-        # "checkinMonth": today.strftime("%Y-%m"),
-        "checkinEmotion": faceAttributes,
-        "checkinEmo": emo,
-        "checkinImageCrop": imageCropUrl,
-        "camerain": 1,
-        "checkout": "",
-        "checkoutEmotion": {"gender":"","age":0},
-        "checkoutEmo": "",
-        "checkoutImageCrop": "",
-        "cameraout": 0,
-        "checkoutdatetime": "",
-        # "checkoutMonth":""
-    }
-    )
+# def mongodetectlower5(now,timei, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
+#     client = pymongo.MongoClient(
+#             "mongodb://127.0.0.1:27017")
+#     today = now.strftime("%Y-%m-%d")
+#     db2 = client.detect
+#     emo = getemo(faceAttributes['emotion'])
+#     db2.detect[today].insert_one(
+#     {
+#       "id": "-",
+#         "checkin": checkin,
+#         "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
+#         # "checkinMonth": today.strftime("%Y-%m"),
+#         "checkinEmotion": faceAttributes,
+#         "checkinEmo": emo,
+#         "checkinImageCrop": imageCropUrl,
+#         "camerain": 1,
+#         "checkout": "",
+#         "checkoutEmotion": {"gender":"","age":0},
+#         "checkoutEmo": "",
+#         "checkoutImageCrop": "",
+#         "cameraout": 0,
+#         "checkoutdatetime": "",
+#         # "checkoutMonth":""
+#     }
+#     )
     
 
     
@@ -509,8 +509,8 @@ def imagescan(frame, count):
                             #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                         else:
-                            mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-                                "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)     
+                            # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
+                            #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)     
                             infocrop(name_crop,now,"",0) 
                         os.remove("data/"+name_crop)
                 else:
@@ -600,8 +600,8 @@ def imagescan(frame, count):
                                 #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                             else:
-                                mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-                                "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)     
+                                # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
+                                # "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)     
                                 infocrop(name_crop,now,"",0) 
                             os.remove("data/"+name_crop)
                     else:
