@@ -336,7 +336,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
         "checkout": checkin,
         "checkoutEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
         "checkoutEmo": "neutral",
-        "checkoutImageCrop": "imageCropUrl",
+        "checkoutImageCrop": imageCropUrl,
         "cameraout": 4,
         "checkoutdatetime": now.strftime("%Y%m%d%H%M%S"),
         # "checkoutMonth":""
