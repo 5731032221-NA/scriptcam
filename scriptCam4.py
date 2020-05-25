@@ -317,7 +317,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
             "mongodb://127.0.0.1:27017")
     today = now.strftime("%Y-%m-%d")
     year_today = int(now.strftime("%Y"))
-    query = {"id": nameperson,"camerain":4}
+    query = {"id": nameperson,"cameraout":4}
     db2 = client.detect
     db_default = client.mea
     query_default = {"id": nameperson}
