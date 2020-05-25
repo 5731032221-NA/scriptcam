@@ -419,7 +419,7 @@ def imagescan(frame, count):
                         name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop,now)
-                        if(identify[index][u'candidates'][0][u'confidence'] > 0.5):
+                        if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
                             person=requests.get(uriPerson,  headers = header)
                             nameperson=person.json()[u'name']
                             mongodetect(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
@@ -456,7 +456,7 @@ def imagescan(frame, count):
                             storecrop(name_crop,now)
                             person=requests.get(uriPerson,  headers = header)
                             nameperson=person.json()[u'name']
-                            if(identify[index][u'candidates'][0][u'confidence'] > 0.5):
+                            if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
                             # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                             #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 mongodetect2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
