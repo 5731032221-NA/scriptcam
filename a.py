@@ -38,5 +38,5 @@ print(((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) )))
 print((int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) ))
 print("old",((int(t2(5,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) ) | (int(t2(20,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) )  ))
 print("new",((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ))
-print("full",((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & (timenow).weekday() < 5)
+print("full",((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5))
 
