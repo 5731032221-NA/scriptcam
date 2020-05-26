@@ -240,8 +240,9 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
         # else: 
         db_default = client.mea
         query_default = {"id": nameperson}
+        default_data = db_default.default.find_one(query_default)
         if(default_data['gender'] == faceAttributes['gender']):
-            default_data = db_default.default.find_one(query_default)
+            
             newvalues = { "$set": { "cameraout": 4,"checkout": checkin ,"checkoutEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
             db.checkin[today].update_one(query, newvalues)
 
