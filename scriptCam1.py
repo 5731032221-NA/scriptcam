@@ -510,6 +510,7 @@ def imagescan(frame, count):
                             # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                             #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
+                            requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                         else:
                             # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                             #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)     
@@ -546,6 +547,7 @@ def imagescan(frame, count):
                                 mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
+                                requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                             else:
                                 infocrop(name_crop,now,"",0) 
                             os.remove("data/"+name_crop)
@@ -601,6 +603,7 @@ def imagescan(frame, count):
                                 # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                 #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
+                                requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                             else:
                                 # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                 # "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)     
@@ -637,6 +640,7 @@ def imagescan(frame, count):
                                     mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                         "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
+                                    requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                                 else:
                                     infocrop(name_crop,now,"",0) 
                                 os.remove("data/"+name_crop)

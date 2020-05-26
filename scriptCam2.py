@@ -419,7 +419,7 @@ def imagescan(frame, count):
                         name_crop=now.strftime("%Y-%m-%d")+"-2-"+current_time+str(count%60)+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop,now)
-                        if(identify[index][u'candidates'][0][u'confidence'] > 0.5):
+                        if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
     
                             person=requests.get(uriPerson,  headers = header)
                             nameperson=person.json()[u'name']
@@ -428,6 +428,7 @@ def imagescan(frame, count):
                             mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                 "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
+                            requests.get('http://localhost:3000/walkoutalertbyid/'+nameperson)
                         else:
                             # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                             #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
@@ -465,6 +466,7 @@ def imagescan(frame, count):
                                 mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
+                                requests.get('http://localhost:3000/walkoutalertbyid/'+nameperson)
                             else:
                                 infocrop(name_crop,now,"",0) 
                             os.remove("data/"+name_crop)
@@ -515,6 +517,7 @@ def imagescan(frame, count):
                                 mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
+                                requests.get('http://localhost:3000/walkoutalertbyid/'+nameperson)
                             else:
                                 # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                 # "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
@@ -541,7 +544,7 @@ def imagescan(frame, count):
                                 name_crop=now.strftime("%Y-%m-%d")+"-2-"+current_time+str(count%60)+"-crop.jpg"
                                 cv2.imwrite("data/"+name_crop, crop_img)
                                 storecrop(name_crop,now)
-                                if(identify[index][u'candidates'][0][u'confidence'] > 0.5):
+                                if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
         
                                     person=requests.get(uriPerson,  headers = header)
                                     nameperson=person.json()[u'name']
@@ -552,6 +555,7 @@ def imagescan(frame, count):
                                     mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                         "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
+                                    requests.get('http://localhost:3000/walkoutalertbyid/'+nameperson)
                                 else:
                                     infocrop(name_crop,now,"",0) 
                                 os.remove("data/"+name_crop)
