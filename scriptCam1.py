@@ -514,7 +514,8 @@ def imagescan(frame, count):
                         else:
                             # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                             #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)     
-                            infocrop(name_crop,now,"",0) 
+                            # infocrop(name_crop,now,"",0) 
+                            infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                         os.remove("data/"+name_crop)
                 else:
                     response=apidetect2(name)
@@ -549,7 +550,8 @@ def imagescan(frame, count):
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                 requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                             else:
-                                infocrop(name_crop,now,"",0) 
+                                # infocrop(name_crop,now,"",0) 
+                                infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                             os.remove("data/"+name_crop)
 
                 os.remove("data/"+name)
@@ -591,7 +593,7 @@ def imagescan(frame, count):
                             name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop,now)
-                            if(identify[index][u'candidates'][0][u'confidence'] > 0.5):
+                            if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
                             
                                 person=requests.get(uriPerson,  headers = header)
                                 nameperson=person.json()[u'name']
@@ -607,7 +609,8 @@ def imagescan(frame, count):
                             else:
                                 # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                 # "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)     
-                                infocrop(name_crop,now,"",0) 
+                                # infocrop(name_crop,now,"",0) 
+                                infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                             os.remove("data/"+name_crop)
                     else:
                         response=apidetect2(name)
@@ -629,7 +632,7 @@ def imagescan(frame, count):
                                 name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+"-crop.jpg"
                                 cv2.imwrite("data/"+name_crop, crop_img)
                                 storecrop(name_crop,now)
-                                if(identify[index][u'candidates'][0][u'confidence'] > 0.5):
+                                if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
         
                                     person=requests.get(uriPerson,  headers = header)
                                     nameperson=person.json()[u'name']
@@ -642,7 +645,8 @@ def imagescan(frame, count):
                                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                     requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                                 else:
-                                    infocrop(name_crop,now,"",0) 
+                                    # infocrop(name_crop,now,"",0) 
+                                    infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                 os.remove("data/"+name_crop)
 
                     os.remove("data/"+name)

@@ -433,7 +433,8 @@ def imagescan(frame, count):
                         else:
                             # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                             #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                            infocrop(name_crop,now,"",0) 
+                            # infocrop(name_crop,now,"",0) 
+                            infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                         os.remove("data/"+name_crop)
                 else:
                     response=apidetect2(name)
@@ -467,7 +468,8 @@ def imagescan(frame, count):
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                 requests.get('http://localhost:3000/walkoutalertbyid/'+nameperson)
                             else:
-                                infocrop(name_crop,now,"",0) 
+                                # infocrop(name_crop,now,"",0) 
+                                infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                             os.remove("data/"+name_crop)
 
                 os.remove("data/"+name)
@@ -521,7 +523,8 @@ def imagescan(frame, count):
                             else:
                                 # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                 # "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                                infocrop(name_crop,now,"",0) 
+                                # infocrop(name_crop,now,"",0) 
+                                infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                             os.remove("data/"+name_crop)
                     else:
                         response=apidetect2(name)
@@ -555,7 +558,8 @@ def imagescan(frame, count):
                                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                     requests.get('http://localhost:3000/walkoutalertbyid/'+nameperson)
                                 else:
-                                    infocrop(name_crop,now,"",0) 
+                                    # infocrop(name_crop,now,"",0) 
+                                    infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                 os.remove("data/"+name_crop)
 
                     os.remove("data/"+name)
