@@ -30,5 +30,6 @@ import time
 from random import randint
 
 timenow =datetime.now() + timedelta(hours=7)
+print(timenow)
 print(((int(t2(5,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) ) | (int(t2(20,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) )  ))
 print((timenow).weekday() < 5)
