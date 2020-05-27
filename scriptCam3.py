@@ -444,7 +444,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
     
 
 
-def imagescan(frame, count):
+def imagescan(frame, count,now):
     # print("cc",count)
     if (count % 14) == 0:
         print("count",count)
@@ -465,7 +465,7 @@ def imagescan(frame, count):
         #         cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,0,255),2)
             if((eyel is not ()) or (eyer is not ())):
             # if(len(faces) > 0):
-                now=datetime.now() + timedelta(hours=7)
+                # now=datetime.now() + timedelta(hours=7)
                 # today=date.today() + timedelta(hours=7)
                 current_time=now.strftime("%H%M%S")
                 name=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+".jpg"
@@ -654,11 +654,11 @@ while(True):
     ret, img=cap.read()
 
     timenow =datetime.now() + timedelta(hours=7)
-    if ((cv2.waitKey(20) & 0xFF == ord('q'))  ):
+    if ((cv2.waitKey(20) & 0xFF == ord('q')) & ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5) ):
          break
     else:
         if ret:
-            _thread.start_new_thread(imagescan, (img, count1))
+            _thread.start_new_thread(imagescan, (img, count1,timenow),)
         else:
             client = pymongo.MongoClient(
                 "mongodb://127.0.0.1:27017")
