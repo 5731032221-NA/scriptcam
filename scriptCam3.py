@@ -654,8 +654,8 @@ while(True):
     ret, img=cap.read()
 
     timenow =datetime.now() + timedelta(hours=7)
-    if ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)):
-         break
+    if (((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)):
+          break
     else:
         if ret:
             _thread.start_new_thread(imagescan, (img, count1,timenow),)
