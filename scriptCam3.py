@@ -293,7 +293,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
             # "faceAttributes": faceAttributes
             }
             )
-
+            requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
 
 def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
     today = now.strftime("%Y-%m-%d")
@@ -346,7 +346,7 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
         "faceAttributes": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
         }
         )
-
+        requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
 
    
 def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
@@ -504,7 +504,7 @@ def imagescan(frame, count):
                             # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                         #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
-                            requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
+                            # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                         else:
                             
                             # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
@@ -544,7 +544,7 @@ def imagescan(frame, count):
                                 mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
-                                requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
+                                # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                             else:
                                 # infocrop(name_crop,now,"",0)
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])  
@@ -598,7 +598,7 @@ def imagescan(frame, count):
                                 # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                             #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
-                                requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
+                                # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                             else:
                                 # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                 # "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
@@ -636,7 +636,7 @@ def imagescan(frame, count):
                                     mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                         "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
-                                    requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
+                                    # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                                 else:
                                     # infocrop(name_crop,now,"",0) 
                                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
