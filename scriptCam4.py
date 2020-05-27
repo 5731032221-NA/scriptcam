@@ -580,7 +580,7 @@ while(True):
     ret, img=cap.read()
     # if ((cv2.waitKey(20) & 0xFF == ord('q')) | (int(t2(20,00).strftime("%H%M"))<int(datetime.now().strftime("%H%M")))):
     timenow =datetime.now() + timedelta(hours=7)
-    if ((cv2.waitKey(20) & 0xFF == ord('q')) & ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5) ):
+    if ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)):
         break
     # if (cv2.waitKey(20) & 0xFF == ord('q')) | (not ret):
     #     break
