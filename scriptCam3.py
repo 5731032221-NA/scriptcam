@@ -560,7 +560,7 @@ def imagescan(frame, count,now):
                 roi_color = img[y:y+h, x:x+w]
                 eyel = face_cascade.detectMultiScale(roi_gray,1.08,)
                 if((eyel is not ())):
-                    now=datetime.now() + timedelta(hours=7)
+                    # now=datetime.now() + timedelta(hours=7)
                 # today=date.today() + timedelta(hours=7)
                     current_time=now.strftime("%H%M%S")
                     name=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+".jpg"
@@ -644,9 +644,9 @@ def imagescan(frame, count,now):
 
                     os.remove("data/"+name)
                     
-now=datetime.now()
+# now=datetime.now()
 
-current_time=now.strftime("%H%M%S")
+# current_time=now.strftime("%H%M%S")
 
 
 count1=1

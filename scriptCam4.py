@@ -566,9 +566,9 @@ def imagescan(frame, count,now):
                     os.remove("data/"+name)
 
 
-now=datetime.now()
+# now=datetime.now()
 
-current_time=now.strftime("%H%M%S")
+# current_time=now.strftime("%H%M%S")
 
 
 #print(int(t2(12, 30).strftime("%H%M")) > int(datetime.now().strftime("%H%M")))
