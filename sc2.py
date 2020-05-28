@@ -62,10 +62,10 @@ container_name = "facedetection"
 #print("cap")
 
 
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-left_eye_cascade = cv2.CascadeClassifier('haarcascade_lefteye_2splits.xml')
-right_eye_cascade = cv2.CascadeClassifier('haarcascade_righteye_2splits.xml')
-frontalface_alt = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
+# face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+# left_eye_cascade = cv2.CascadeClassifier('haarcascade_lefteye_2splits.xml')
+# right_eye_cascade = cv2.CascadeClassifier('haarcascade_righteye_2splits.xml')
+# frontalface_alt = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 # cap = cv2.VideoCapture(   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov")
 # cap = cv2.VideoCapture("20200108v2.mp4")
 cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.15:8554/stream0/out.h264")
