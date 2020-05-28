@@ -390,14 +390,16 @@ def imagescan(frame, count,now):
         # flag = 0
         face_detect = dlib.get_frontal_face_detector()
         rects = face_detect(gray, 0)
-        print("rects",rects)
+        now2=datetime.now() + timedelta(hours=7)
+        print("rects",rects,now,now2)
         # if(rects is not ()):
-        print("rects",rects)
+        # print("rects",rects)
         print("rects len",len(rects))
         if(len(rects) > 0):
             # if(len(faces) > 0):
                 # now=datetime.now() + timedelta(hours=7)
                 # today=date.today() + timedelta(hours=7)
+            
             current_time=now.strftime("%H%M%S")
             name=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+".jpg"
             cv2.imwrite("data/"+name, frame)
