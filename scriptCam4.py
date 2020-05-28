@@ -1,4 +1,4 @@
-
+import sys
 try:
 
     import numpy as np
@@ -611,12 +611,12 @@ try:
         cv2.destroyAllWindows()
 
 except:
-  client = pymongo.MongoClient(
-                        "mongodb://127.0.0.1:27017")
-                    db2 = client.errorlog
-                    errdate = (datetime.now() + timedelta(hours=7))
-                    db2.why[errdate.strftime("%Y-%m-%d")].insert_one({
-                        "datetime": errdate.strftime("%Y%m%d%H%M%S"),
-                        "message": "Camera 4 not avaliable"
-                    }
-                    )
+    from datetime import  timedelta, datetime, date, time as t2
+    client = pymongo.MongoClient("mongodb://127.0.0.1:27017")
+    db2 = client.errorlog
+    errdate = (datetime.now() + timedelta(hours=7))
+    db2.why[errdate.strftime("%Y-%m-%d")].insert_one({
+        "datetime": errdate.strftime("%Y%m%d%H%M%S"),
+        "message": sys.exc_info()[0]
+    }
+    )
