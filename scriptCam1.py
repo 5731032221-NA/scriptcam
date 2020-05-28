@@ -1,11 +1,11 @@
 import sys 
 from datetime import  timedelta, datetime, date, time as t2
 import time
-timenow =datetime.now() 
-bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
-if (not bool1):
-    time.sleep(900)
-    sys.exit()
+# timenow =datetime.now() 
+# bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
+# if (not bool1):
+#     time.sleep(900)
+#     sys.exit()
 import numpy as np
 import cv2
 import os
@@ -659,13 +659,13 @@ count1=1
 while(True):
     ret, img=cap.read()
     timenow =datetime.now() 
-    bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
-
-    if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
+    # bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
+    # if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
+    if ((cv2.waitKey(20) & 0xFF == ord('q'))):
         break
     else:
         if ret:
-            _thread.start_new_thread(imagescan, (img, count1,timenow),)
+            _thread.start_new_thread(imagescan, (img, count1,timenow))
         else:
             client = pymongo.MongoClient(
                 "mongodb://127.0.0.1:27017")
