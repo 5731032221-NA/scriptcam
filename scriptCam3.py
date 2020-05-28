@@ -659,13 +659,13 @@ count1=1
 while(True):
     ret, img=cap.read()
 
-    timenow =datetime.now() 
+    timenow =datetime.now() + timedelta(hours=7)
     bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
     if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
         break
     else:
         if ret:
-            _thread.start_new_thread(imagescan, (img, count1,timenow),)
+            _thread.start_new_thread(imagescan, (img, count1,timenow))
         else:
             client = pymongo.MongoClient(
                 "mongodb://127.0.0.1:27017")
