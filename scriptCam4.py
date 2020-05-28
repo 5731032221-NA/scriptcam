@@ -575,33 +575,35 @@ def imagescan(frame, count,now):
 count1=1
 # executor = concurrent.futures.ThreadPoolExecutor(max_workers=8)
 while(True):
-    # ##print("a")
-    
-    ret, img=cap.read()
-    # if ((cv2.waitKey(20) & 0xFF == ord('q')) | (int(t2(20,00).strftime("%H%M"))<int(datetime.now().strftime("%H%M")))):
-    timenow =datetime.now() + timedelta(hours=7)
-    if (cv2.waitKey(20) & 0xFF == ord('q')):
-        break
-    # if (cv2.waitKey(20) & 0xFF == ord('q')) | (not ret):
-    #     break
-    # asyncio.run(imagescan(img, count1))
-    # executor.submit(asyncio.run(imagescan(img, count1)))
-    # executor.submit(imagescan(img, count1))
-    else:
-        if ret:
-            _thread.start_new_thread(imagescan, (img, count1,timenow))
-        else:
-            client = pymongo.MongoClient(
-                "mongodb://127.0.0.1:27017")
-            db2 = client.errorlog
-            errdate = (datetime.now() + timedelta(hours=7))
-            db2.python[errdate.strftime("%Y-%m-%d")].insert_one({
-                "datetime": errdate.strftime("%Y%m%d%H%M%S"),
-                "message": "Camera 4 not avaliable"
-            }
-            )
+    cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.17:8554/stream0/out.h264")
+    while(True):
+        # ##print("a")
+        
+        ret, img=cap.read()
+        # if ((cv2.waitKey(20) & 0xFF == ord('q')) | (int(t2(20,00).strftime("%H%M"))<int(datetime.now().strftime("%H%M")))):
+        timenow =datetime.now() + timedelta(hours=7)
+        if (cv2.waitKey(20) & 0xFF == ord('q')):
             break
-    count1=count1 + 1
+        # if (cv2.waitKey(20) & 0xFF == ord('q')) | (not ret):
+        #     break
+        # asyncio.run(imagescan(img, count1))
+        # executor.submit(asyncio.run(imagescan(img, count1)))
+        # executor.submit(imagescan(img, count1))
+        else:
+            if ret:
+                _thread.start_new_thread(imagescan, (img, count1,timenow))
+            else:
+                client = pymongo.MongoClient(
+                    "mongodb://127.0.0.1:27017")
+                db2 = client.errorlog
+                errdate = (datetime.now() + timedelta(hours=7))
+                db2.python[errdate.strftime("%Y-%m-%d")].insert_one({
+                    "datetime": errdate.strftime("%Y%m%d%H%M%S"),
+                    "message": "Camera 4 not avaliable"
+                }
+                )
+                break
+        count1=count1 + 1
     
-cap.release()
-cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
