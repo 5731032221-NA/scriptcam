@@ -674,7 +674,7 @@ while(True):
                 "message": "Camera 3 not avaliable"
             }
             )
-            break
+            # break
     count1=count1 + 1
 
 cap.release()
