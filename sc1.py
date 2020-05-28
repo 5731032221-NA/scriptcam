@@ -399,7 +399,8 @@ def imagescan(frame, count,now):
         face_detect = dlib.get_frontal_face_detector()
         rects = face_detect(gray, 1)
         print("rects",rects)
-        if(rects is not rectangles[]):
+        print("rects size",rects.size())
+        if(rects.size() > 0):
         #time.sleep(count/60)
         # frame=resize(img)
         # frame = img
