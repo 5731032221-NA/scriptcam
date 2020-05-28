@@ -4,6 +4,7 @@ import time
 timenow =datetime.now() 
 bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
 if (not bool1):
+    time.sleep(900)
     sys.exit()
 import numpy as np
 import cv2
@@ -658,8 +659,9 @@ count1=1
 while(True):
     ret, img=cap.read()
 
-    timenow =datetime.now() + timedelta(hours=7)
-    if ((cv2.waitKey(20) & 0xFF == ord('q'))):
+    timenow =datetime.now() 
+    bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
+    if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
         break
     else:
         if ret:
