@@ -11,6 +11,7 @@ import base64
 from io import BytesIO
 from PIL import Image
 from pkcs7 import PKCS7Encoder
+
 # from io import StringIO
 # import sys
 # import os
@@ -85,6 +86,7 @@ face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 left_eye_cascade = cv2.CascadeClassifier('haarcascade_lefteye_2splits.xml')
 right_eye_cascade = cv2.CascadeClassifier('haarcascade_righteye_2splits.xml')
 frontalface_alt = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
+
 # cap = cv2.VideoCapture(   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov")
 # cap = cv2.VideoCapture("20200108v2.mp4")
 cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
@@ -135,7 +137,6 @@ def storecrop(name,now):
 
 
     
-
 def infocrop(name,now,detectname,confidence):
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
@@ -150,6 +151,7 @@ def infocrop(name,now,detectname,confidence):
         "train": ''
     }
     )
+
 
 
 
@@ -244,6 +246,8 @@ def getemo(emotion):
             emostr = 'surprise'
     return emostr
 
+
+
 def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
     today = now.strftime("%Y-%m-%d")
     client = pymongo.MongoClient(
@@ -270,7 +274,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
                 "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
                 "checkinEmo": emo,
                 "checkinImageCrop": imageCropUrl,
-                "camerain": 3,
+                "camerain": 1,
                 "checkout": "",
                 "checkoutEmotion": {"gender":"","age":0},
                 "checkoutEmo": "",
@@ -284,13 +288,13 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
             db.checkattendance.insert_one({
             "id": nameperson,
             "checkin": { "time": now.strftime("%H:%M:%S"),
-                        "emotion": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] }
+                        "emotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] }
             },
             "checkout": { "time": "",
                         "emotion": ""
             },
             "Date":  now.strftime("%Y-%m-%d"),
-            # "faceAttributes": faceAttributes
+            # "faceAttributes": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] }
             }
             )
             requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
@@ -304,13 +308,16 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
     # emo = getemo(faceAttributes['emotion'])
     query = {"id": nameperson}
     queryy = db.checkin[today].find(query)
+    db_default = client.mea
+    query_default = {"id": nameperson}
+    default_data = db_default.default.find_one(query_default)
+    
+
     if(queryy.count() > 0):
         newvalues = { "$set": { "checkout": checkin } }
 
     else:
-        db_default = client.mea
-        query_default = {"id": nameperson}
-        default_data = db_default.default.find_one(query_default)
+        
         # print(default_data)
         db.checkin[today].update(
         query,
@@ -322,7 +329,7 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
             "checkinEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
             "checkinEmo": "neutral",
             "checkinImageCrop": imageCropUrl,
-            "camerain": 3,
+            "camerain": 1,
             "checkout": "",
             "checkoutEmotion": {"gender":"","age":0},
             "checkoutEmo": "",
@@ -353,7 +360,7 @@ def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, i
             "mongodb://127.0.0.1:27017")
     today = now.strftime("%Y-%m-%d")
     emo = getemo(faceAttributes['emotion'])
-    query = {"id": nameperson,"camerain":3}
+    query = {"id": nameperson,"camerain":1}
     db2 = client.detect
     db_default = client.mea
     query_default = {"id": nameperson}
@@ -369,7 +376,7 @@ def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, i
                 "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
                 "checkinEmo": emo,
                 "checkinImageCrop": imageCropUrl,
-                "camerain": 3,
+                "camerain": 1,
                 "checkout": "",
                 "checkoutEmotion": {"gender":"","age":0},
                 "checkoutEmo": "",
@@ -379,18 +386,17 @@ def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, i
                 # "checkoutMonth":""
             },
                 upsert=True
-            ) 
-        
-    
+            )   
+
 def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
     today = now.strftime("%Y-%m-%d")
     year_today = int(now.strftime("%Y"))
-    query = {"id": nameperson,"camerain":3}
+    query = {"id": nameperson,"camerain":1}
     db2 = client.detect
     db_default = client.mea
-    query_default = {"id": nameperson}
+    query_default = {"id": nameperson }
     default_data = db_default.default.find_one(query_default)
     db2.detect[today].update(
     query,
@@ -402,7 +408,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
         "checkinEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
         "checkinEmo": "neutral",
         "checkinImageCrop": imageCropUrl,
-        "camerain": 3,
+        "camerain": 1,
         "checkout": "",
         "checkoutEmotion": {"gender":"","age":0},
         "checkoutEmo": "",
@@ -440,6 +446,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
 #     }
 #     )
     
+
     
 
 
@@ -492,23 +499,19 @@ def imagescan(frame, count,now):
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop,now)
                         if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
-    
                             person=requests.get(uriPerson,  headers = header)
                             nameperson=person.json()[u'name']
                             mongodetect(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-                                "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                            
+                                "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)        
                             mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                 "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                             # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
-                        #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
+                            #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
-                            # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
+                            
                         else:
-                            
                             # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-                            #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                            
+                            #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)     
                             # infocrop(name_crop,now,"",0) 
                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                         os.remove("data/"+name_crop)
@@ -533,7 +536,6 @@ def imagescan(frame, count,now):
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop,now)
                             if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
-    
                                 person=requests.get(uriPerson,  headers = header)
                                 nameperson=person.json()[u'name']
                                 mongodetect2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
@@ -545,11 +547,13 @@ def imagescan(frame, count,now):
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                 # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                             else:
-                                # infocrop(name_crop,now,"",0)
-                                infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])  
+                                # infocrop(name_crop,now,"",0) 
+                                infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                             os.remove("data/"+name_crop)
 
                 os.remove("data/"+name)
+             
+        
         if(sent == 0):
             body = frontalface_alt.detectMultiScale(img,1.08,1 )
             for (x, y, w, h) in body:
@@ -587,22 +591,22 @@ def imagescan(frame, count,now):
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop,now)
                             if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
-        
                                 person=requests.get(uriPerson,  headers = header)
                                 nameperson=person.json()[u'name']
                                 mongodetect(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-                                "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
+                                "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)        
+                            
                                 mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
-                            #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
+                                #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                 # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                             else:
                                 # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-                                # "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                                # infocrop(name_crop,now,"",0)
-                                infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])  
+                                # "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)     
+                                # infocrop(name_crop,now,"",0) 
+                                infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                             os.remove("data/"+name_crop)
                     else:
                         response=apidetect2(name)
@@ -641,7 +645,8 @@ def imagescan(frame, count,now):
                                 os.remove("data/"+name_crop)
 
                     os.remove("data/"+name)
-                    
+
+
 # now=datetime.now()
 
 # current_time=now.strftime("%H%M%S")
@@ -650,13 +655,12 @@ def imagescan(frame, count,now):
 count1=1
 while(True):
     ret, img=cap.read()
-
     timenow =datetime.now() + timedelta(hours=7)
     if (cv2.waitKey(20) & 0xFF == ord('q')):
         break
     else:
         if ret:
-            _thread.start_new_thread(imagescan, (img, count1,timenow),)
+            _thread.start_new_thread(imagescan, (img, count1))
         else:
             client = pymongo.MongoClient(
                 "mongodb://127.0.0.1:27017")
@@ -664,10 +668,11 @@ while(True):
             errdate = (datetime.now() + timedelta(hours=7))
             db2.python[errdate.strftime("%Y-%m-%d")].insert_one({
                 "datetime": errdate.strftime("%Y%m%d%H%M%S"),
-                "message": "Camera 3 not avaliable"
+                "message": "Camera 1 not avaliable"
             }
             )
             break
+
     count1=count1 + 1
 
 cap.release()
