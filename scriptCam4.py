@@ -611,6 +611,7 @@ try:
         cv2.destroyAllWindows()
 
 except:
+    import pymongo
     from datetime import  timedelta, datetime, date, time as t2
     client = pymongo.MongoClient("mongodb://127.0.0.1:27017")
     db2 = client.errorlog
