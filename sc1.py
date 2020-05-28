@@ -447,6 +447,7 @@ def imagescan(frame, count,now):
                     name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+"-crop.jpg"
                     cv2.imwrite("data/"+name_crop, crop_img)
                     storecrop(name_crop,now)
+                    print(identify)
                     if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
 
                         person=requests.get(uriPerson,  headers = header)
@@ -478,6 +479,7 @@ def imagescan(frame, count,now):
                         arrfaceid.append(face[u'faceId'])
                     response=apiidentify(name, arrfaceid)
                     identify=response.json()
+                    print(identify)
                     for index, iden in enumerate(identify):
                         uriPerson='https://meafacedetection.cognitiveservices.azure.com/face/v1.0/persongroups/mea/persons/' + \
                             str(json.dumps(identify[index][u'candidates'][0][u'personId'])).replace(
