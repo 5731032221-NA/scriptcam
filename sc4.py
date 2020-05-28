@@ -453,7 +453,7 @@ def imagescan(frame, count,now):
                         arrfaceid.append(face[u'faceId'])
                     response=apiidentify(name, arrfaceid)
                     identify=response.json()
-                    print(identify2)
+                    print(identify)
                     for index, iden in enumerate(identify):
                         uriPerson='https://meafacedetection.cognitiveservices.azure.com/face/v1.0/persongroups/mea/persons/' + \
                             str(json.dumps(identify[index][u'candidates'][index][u'personId'])).replace(
