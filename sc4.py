@@ -396,7 +396,7 @@ def imagescan(frame, count,now):
                 # now=datetime.now() + timedelta(hours=7)
                 # today=date.today() + timedelta(hours=7)
             current_time=now.strftime("%H%M%S")
-            name=now.strftime("%Y-%m-%d")+"-2-"+current_time+str(count%60)+".jpg"
+            name=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+".jpg"
             cv2.imwrite("data/"+name, frame)
 
             storeblob(name)
@@ -417,7 +417,7 @@ def imagescan(frame, count,now):
                     header={'Ocp-Apim-Subscription-Key': subscription_key}
                     crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                         3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                    name_crop=now.strftime("%Y-%m-%d")+"-2-"+current_time+str(count%60)+"-crop.jpg"
+                    name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+"-crop.jpg"
                     cv2.imwrite("data/"+name_crop, crop_img)
                     storecrop(name_crop,now)
                     if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
@@ -454,7 +454,7 @@ def imagescan(frame, count,now):
                         header={'Ocp-Apim-Subscription-Key': subscription_key}
                         crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                             3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                        name_crop=now.strftime("%Y-%m-%d")+"-2-"+current_time+str(count%60)+"-crop.jpg"
+                        name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop,now)
                         if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
