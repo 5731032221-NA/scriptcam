@@ -445,7 +445,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
 
 def imagescan(frame, count,now):
     # print("cc",count)
-    if (count % 40) == 0:
+    if (count % 28) == 0:
         print("count",count)
         #time.sleep(count/60)
         # frame=resize(img)
@@ -652,7 +652,7 @@ while(True):
     ret, img=cap.read()
 
     timenow =datetime.now() + timedelta(hours=7)
-    if (cv2.waitKey(20) & 0xFF == ord('q')):
+    if ((cv2.waitKey(20) & 0xFF == ord('q')) & ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)):
         break
     else:
         if ret:
