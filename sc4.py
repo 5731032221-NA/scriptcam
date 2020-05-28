@@ -380,7 +380,7 @@ def imagescan(frame, count,now):
         #time.sleep(count/60)
         # frame=resize(img)
         # frame = img
-         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         im = np.float32(gray) / 255.0
         # Calculate gradient 
         gx = cv2.Sobel(im, cv2.CV_32F, 1, 0, ksize=1)
