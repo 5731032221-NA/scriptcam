@@ -389,13 +389,13 @@ def imagescan(frame, count,now):
     if (count % 28) == 0:
         print("count",count)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        im = np.float32(gray) / 255.0
-        # Calculate gradient 
-        gx = cv2.Sobel(im, cv2.CV_32F, 1, 0, ksize=1)
-        gy = cv2.Sobel(im, cv2.CV_32F, 0, 1, ksize=1)
-        mag, angle = cv2.cartToPolar(gx, gy, angleInDegrees=True)
-        # video_capture = cv2.VideoCapture(0)
-        flag = 0
+        # im = np.float32(gray) / 255.0
+        # # Calculate gradient 
+        # gx = cv2.Sobel(im, cv2.CV_32F, 1, 0, ksize=1)
+        # gy = cv2.Sobel(im, cv2.CV_32F, 0, 1, ksize=1)
+        # mag, angle = cv2.cartToPolar(gx, gy, angleInDegrees=True)
+        # # video_capture = cv2.VideoCapture(0)
+        # flag = 0
         face_detect = dlib.get_frontal_face_detector()
         rects = face_detect(gray, 1)
         # print("rects",rects)
