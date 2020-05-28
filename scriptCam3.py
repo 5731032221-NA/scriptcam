@@ -348,7 +348,6 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
         )
         requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
 
-   
 def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
@@ -446,7 +445,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
 
 def imagescan(frame, count,now):
     # print("cc",count)
-    if (count % 28) == 0:
+    if (count % 14) == 0:
         print("count",count)
         #time.sleep(count/60)
         # frame=resize(img)
@@ -626,7 +625,6 @@ def imagescan(frame, count,now):
                                 cv2.imwrite("data/"+name_crop, crop_img)
                                 storecrop(name_crop,now)
                                 if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
-        
                                     person=requests.get(uriPerson,  headers = header)
                                     nameperson=person.json()[u'name']
                                     mongodetect2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (

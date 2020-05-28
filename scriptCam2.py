@@ -373,7 +373,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
 
 def imagescan(frame, count,now):
     # print("cc",count)
-    if (count % 28) == 0:
+    if (count % 14) == 0:
         print("count",count)
         #time.sleep(count/60)
         # frame=resize(img)
