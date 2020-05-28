@@ -1,3 +1,6 @@
+import sys 
+if (((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)):
+    sys.exit()
 import numpy as np
 import cv2
 import os
