@@ -659,7 +659,7 @@ while(True):
     ret, img=cap.read()
 
     timenow =datetime.now() + timedelta(hours=7)
-    if not ((cv2.waitKey(20) & 0xFF == ord('q'))):
+    if ((cv2.waitKey(20) & 0xFF == ord('q'))):
         break
     else:
         if ret:
