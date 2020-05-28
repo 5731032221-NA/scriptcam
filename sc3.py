@@ -398,8 +398,8 @@ def imagescan(frame, count,now):
         flag = 0
         face_detect = dlib.get_frontal_face_detector()
         rects = face_detect(gray, 1)
-        print("rects",rects)
-        if(rects is not ()):
+        # print("rects",rects)
+        if(len(rects) > 0):
         #time.sleep(count/60)
         # frame=resize(img)
         # frame = img

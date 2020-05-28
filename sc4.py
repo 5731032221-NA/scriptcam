@@ -391,7 +391,10 @@ def imagescan(frame, count,now):
         face_detect = dlib.get_frontal_face_detector()
         rects = face_detect(gray, 1)
         print("rects",rects)
-        if(rects is not ()):
+        # if(rects is not ()):
+        print("rects",rects)
+        print("rects len",len(rects))
+        if(len(rects) > 0):
             # if(len(faces) > 0):
                 # now=datetime.now() + timedelta(hours=7)
                 # today=date.today() + timedelta(hours=7)
