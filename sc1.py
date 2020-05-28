@@ -1,4 +1,5 @@
 
+import dlib
 import sys 
 from datetime import  timedelta, datetime, date, time as t2
 import time
