@@ -246,7 +246,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
         query_default = {"id": nameperson}
         default_data = db_default.default.find_one(query_default)
         if(default_data['gender'] == faceAttributes['gender']):
-            newvalues = { "$set": { "cameraout": 2,"checkout": checkin ,"checkoutEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
+            newvalues = { "$set": { "cameraout": 4,"checkout": checkin ,"checkoutEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
             db.checkin[today].update_one(query, newvalues)
 
             db.checkattendance.update_one(query, { "$set": {"checkout": { "time": now.strftime("%H:%M:%S"),
@@ -274,7 +274,7 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
         query_default = {"id": nameperson}
         default_data = db_default.default.find_one(query_default)
         
-        newvalues = { "$set": { "cameraout": 2,"checkout": checkin ,"checkoutEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },"checkoutEmo": "neutral", "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
+        newvalues = { "$set": { "cameraout": 4,"checkout": checkin ,"checkoutEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },"checkoutEmo": "neutral", "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
         db.checkin[today].update_one(query, newvalues)
 
         db.checkattendance.update_one(query, { "$set": {"checkout": { "time": now.strftime("%H:%M:%S"),
@@ -287,7 +287,7 @@ def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, i
             "mongodb://127.0.0.1:27017")
     today = now.strftime("%Y-%m-%d")
     emo = getemo(faceAttributes['emotion'])
-    query = {"id": nameperson,"cameraout":2}
+    query = {"id": nameperson,"cameraout":4}
     db2 = client.detect
     db_default = client.mea
     query_default = {"id": nameperson}
@@ -308,7 +308,7 @@ def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, i
                 "checkoutEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
                 "checkoutEmo": emo,
                 "checkoutImageCrop": imageCropUrl,
-                "cameraout": 2,
+                "cameraout": 4,
                 "checkoutdatetime": now.strftime("%Y%m%d%H%M%S"),
                 # "checkoutMonth":""
             },
@@ -320,7 +320,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
             "mongodb://127.0.0.1:27017")
     today = now.strftime("%Y-%m-%d")
     year_today = int(now.strftime("%Y"))
-    query = {"id": nameperson,"cameraout":2}
+    query = {"id": nameperson,"cameraout":4}
     db2 = client.detect
     db_default = client.mea
     query_default = {"id": nameperson}
@@ -340,7 +340,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
         "checkoutEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
         "checkoutEmo": "neutral",
         "checkoutImageCrop": imageCropUrl,
-        "cameraout": 2,
+        "cameraout": 4,
         "checkoutdatetime": now.strftime("%Y%m%d%H%M%S"),
         # "checkoutMonth":""
     },
