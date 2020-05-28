@@ -1,7 +1,7 @@
 import sys 
 from datetime import  timedelta, datetime, date, time as t2
 import time
-timenow =datetime.now() 
+timenow =datetime.now() + timedelta(hours=7)
 bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
 if (not bool1):
     time.sleep(900)
