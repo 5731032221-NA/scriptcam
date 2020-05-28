@@ -505,6 +505,7 @@ def imagescan(frame, count,now):
                 if((eyel is not ())):
                     # now=datetime.now() + timedelta(hours=7)
                 #today=date.today() + timedelta(hours=7)
+                    print("hmm7")
                     current_time=now.strftime("%H%M%S")
                     name=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+".jpg"
                     cv2.imwrite("data/"+name, frame)
@@ -584,6 +585,7 @@ def imagescan(frame, count,now):
                                 os.remove("data/"+name_crop)
 
                     os.remove("data/"+name)
+                print("hmm8")
 
 
 # now=datetime.now()
