@@ -98,13 +98,13 @@ cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.16:8554/stream0/out.h264")
 
 
 
-# def resize(img):
-#     scale_percent = 80  # percent of original size
-#     width = int(img.shape[1] * scale_percent / 100)
-#     height = int(img.shape[0] * scale_percent / 100)
-#     dim = (width, height)
+def resize(img):
+    scale_percent = 80  # percent of original size
+    width = int(img.shape[1] * scale_percent / 80)
+    height = int(img.shape[0] * scale_percent / 80)
+    dim = (width, height)
 
-#     return cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
+    return cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
 
 def storeblob(name):
     print(name)
@@ -450,13 +450,13 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
     
 
 
-def imagescan(frame, count,now):
+def imagescan(img, count,now):
     # print("cc",count)
     if (count % 28) == 0:
         print("count",count)
         #time.sleep(count/60)
-        # frame=resize(img)
-        # frame = img
+        frame=resize(img)
+        frame = img
         sent = 0
         gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces=face_cascade.detectMultiScale(gray, 1.1, 4)
