@@ -386,7 +386,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
 
 def imagescan(frame, count,now):
     # print("cc",count)
-    if (count % 14) == 0:
+    if (count % 28) == 0:
         print("count",count)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # im = np.float32(gray) / 255.0

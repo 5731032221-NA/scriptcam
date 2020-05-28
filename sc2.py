@@ -375,7 +375,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
 
 def imagescan(frame, count,now):
     # print("cc",count)
-    if (count % 14) == 0:
+    if (count % 28) == 0:
         print("count",count)
         #time.sleep(count/60)
         # frame=resize(img)
@@ -410,6 +410,7 @@ def imagescan(frame, count,now):
                     arrfaceid.append(face[u'faceId'])
                 response=apiidentify(name, arrfaceid)
                 identify=response.json()
+                print(identify)
                 for index, iden in enumerate(identify):
                     uriPerson='https://meafacedetection.cognitiveservices.azure.com/face/v1.0/persongroups/mea/persons/' + \
                         str(json.dumps(identify[index][u'candidates'][0][u'personId'])).replace(
@@ -447,6 +448,7 @@ def imagescan(frame, count,now):
                         arrfaceid.append(face[u'faceId'])
                     response=apiidentify(name, arrfaceid)
                     identify=response.json()
+                    print(identify)
                     for index, iden in enumerate(identify):
                         uriPerson='https://meafacedetection.cognitiveservices.azure.com/face/v1.0/persongroups/mea/persons/' + \
                             str(json.dumps(identify[index][u'candidates'][index][u'personId'])).replace(
