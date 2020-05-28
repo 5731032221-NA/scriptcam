@@ -393,9 +393,13 @@ def imagescan(frame, count,now):
         sent = 0
         gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces=face_cascade.detectMultiScale(gray, 1.1, 4)
+        print("faces")
         for (x, y, w, h) in faces:
+            print("roi_gray")
             roi_gray = gray[y:y+h, x:x+w]
+            print("roi_color")
             roi_color = img[y:y+h, x:x+w]
+            print("hmm")
             eyel = left_eye_cascade.detectMultiScale(roi_gray)
         #     for (ex,ey,ew,eh) in eyel:
         #         cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
@@ -488,11 +492,16 @@ def imagescan(frame, count,now):
         if(sent == 0):
             body = frontalface_alt.detectMultiScale(img,1.08,1 )
             for (x, y, w, h) in body:
+                print("hmm3")
                 cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+                print("hmm2")
         #         cv2.imwrite('my.jpg', img)
                 roi_gray = gray[y:y+h, x:x+w]
+                print("hmm4")
                 roi_color = img[y:y+h, x:x+w]
-                eyel = face_cascade.detectMultiScale(roi_gray,1.08,)
+                print("hmm5")
+                eyel = face_cascade.detectMultiScale(roi_gray,1.08)
+                print("hmm6")
                 if((eyel is not ())):
                     # now=datetime.now() + timedelta(hours=7)
                 #today=date.today() + timedelta(hours=7)
