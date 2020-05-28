@@ -99,9 +99,9 @@ cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.16:8554/stream0/out.h264")
 
 
 def resize(img):
-    scale_percent = 80  # percent of original size
-    width = int(img.shape[1] * scale_percent / 50)
-    height = int(img.shape[0] * scale_percent / 50)
+    scale_percent = 50  # percent of original size
+    width = int(img.shape[1] * scale_percent / 100)
+    height = int(img.shape[0] * scale_percent / 100)
     dim = (width, height)
 
     return cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
