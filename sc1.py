@@ -211,7 +211,7 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
                 "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
                 "checkinEmo": emo,
                 "checkinImageCrop": imageCropUrl,
-                "camerain": 3,
+                "camerain": 1,
                 "checkout": "",
                 "checkoutEmotion": {"gender":"","age":0},
                 "checkoutEmo": "",
@@ -263,7 +263,7 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
             "checkinEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
             "checkinEmo": "neutral",
             "checkinImageCrop": imageCropUrl,
-            "camerain": 3,
+            "camerain": 1,
             "checkout": "",
             "checkoutEmotion": {"gender":"","age":0},
             "checkoutEmo": "",
@@ -294,7 +294,7 @@ def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, i
             "mongodb://127.0.0.1:27017")
     today = now.strftime("%Y-%m-%d")
     emo = getemo(faceAttributes['emotion'])
-    query = {"id": nameperson,"camerain":3}
+    query = {"id": nameperson,"camerain":1}
     db2 = client.detect
     db_default = client.mea
     query_default = {"id": nameperson}
@@ -310,7 +310,7 @@ def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, i
                 "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
                 "checkinEmo": emo,
                 "checkinImageCrop": imageCropUrl,
-                "camerain": 3,
+                "camerain": 1,
                 "checkout": "",
                 "checkoutEmotion": {"gender":"","age":0},
                 "checkoutEmo": "",
@@ -343,7 +343,7 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
         "checkinEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
         "checkinEmo": "neutral",
         "checkinImageCrop": imageCropUrl,
-        "camerain": 3,
+        "camerain": 1,
         "checkout": "",
         "checkoutEmotion": {"gender":"","age":0},
         "checkoutEmo": "",
@@ -648,7 +648,7 @@ while(True):
             errdate = (datetime.now() + timedelta(hours=7))
             db2.python[errdate.strftime("%Y-%m-%d")].insert_one({
                 "datetime": errdate.strftime("%Y%m%d%H%M%S"),
-                "message": "Camera 3 not avaliable"
+                "message": "Camera 1 not avaliable"
             }
             )
             break
