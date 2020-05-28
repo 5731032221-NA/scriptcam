@@ -1,4 +1,7 @@
 import sys 
+from datetime import  timedelta, datetime, date, time as t2
+import time
+timenow =datetime.now() + timedelta(hours=7)
 if (((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)):
     sys.exit()
 import numpy as np
@@ -27,8 +30,8 @@ import _thread
 
 import requests
 import json
-from datetime import  timedelta, datetime, date, time as t2
-import time
+# from datetime import  timedelta, datetime, date, time as t2
+# import time
 from random import randint
 # set to your own subscription key value
 subscription_key = '99d0310d30c24046a148cbf795a34121'
