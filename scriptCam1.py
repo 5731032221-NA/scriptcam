@@ -1,8 +1,9 @@
 import sys 
 from datetime import  timedelta, datetime, date, time as t2
 import time
-timenow =datetime.now() + timedelta(hours=7)
-if (((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)):
+timenow =datetime.now() 
+bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
+if (not bool1):
     sys.exit()
 import numpy as np
 import cv2
@@ -658,7 +659,7 @@ while(True):
     ret, img=cap.read()
 
     timenow =datetime.now() + timedelta(hours=7)
-    if ((cv2.waitKey(20) & 0xFF == ord('q')) & ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)):
+    if ((cv2.waitKey(20) & 0xFF == ord('q')) ):
         break
     else:
         if ret:
