@@ -432,7 +432,7 @@ def imagescan(frame, count,now):
                         header={'Ocp-Apim-Subscription-Key': subscription_key}
                         crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                             3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                        name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+index+"-crop.jpg"
+                        name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop,now)
                         if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
@@ -469,7 +469,7 @@ def imagescan(frame, count,now):
                             header={'Ocp-Apim-Subscription-Key': subscription_key}
                             crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                                 3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                            name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+index+"-crop.jpg"
+                            name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop,now)
                             person=requests.get(uriPerson,  headers = header)
@@ -528,7 +528,7 @@ def imagescan(frame, count,now):
                             header={'Ocp-Apim-Subscription-Key': subscription_key}
                             crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                                 3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                            name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+index+"-crop.jpg"
+                            name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop,now)
                             if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
@@ -565,7 +565,7 @@ def imagescan(frame, count,now):
                                 header={'Ocp-Apim-Subscription-Key': subscription_key}
                                 crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                                     3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                                name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+index+"-crop.jpg"
+                                name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                                 cv2.imwrite("data/"+name_crop, crop_img)
                                 storecrop(name_crop,now)
                                 person=requests.get(uriPerson,  headers = header)
