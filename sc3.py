@@ -464,6 +464,8 @@ def imagescan(frame, count,now):
                         #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                         
                         # infocrop(name_crop,now,"",0) 
+                        person=requests.get(uriPerson,  headers = header)
+                        nameperson=person.json()[u'name']
                         infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                     os.remove("data/"+name_crop)
             else:
@@ -501,6 +503,8 @@ def imagescan(frame, count,now):
                             # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                         else:
                             # infocrop(name_crop,now,"",0)
+                            person=requests.get(uriPerson,  headers = header)
+                            nameperson=person.json()[u'name']
                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])  
                         os.remove("data/"+name_crop)
 
