@@ -498,7 +498,7 @@ count1=1
 # executor = concurrent.futures.ThreadPoolExecutor(max_workers=8)
 while(True):
     # ##print("a")
-    print(count1)
+    
     ret, img=cap.read()
     timenow =datetime.now() + timedelta(hours=7)
     # if (cv2.waitKey(20) & 0xFF == ord('q')):# if (cv2.waitKey(20) & 0xFF == ord('q')):
@@ -512,6 +512,7 @@ while(True):
     # executor.submit(imagescan(img, count1))
     else:
         if ret:
+            print(count1)
             _thread.start_new_thread(imagescan, (img, count1,timenow))
         else:
             client = pymongo.MongoClient(
