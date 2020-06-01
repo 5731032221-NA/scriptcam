@@ -638,7 +638,7 @@ count1=1
 while(True):
     ret, img=cap.read()
     timenow =datetime.now() + timedelta(hours=7)
-    bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
+    bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
     if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
     # if ((cv2.waitKey(20) & 0xFF == ord('q'))):
         break
