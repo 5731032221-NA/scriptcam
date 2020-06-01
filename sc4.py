@@ -498,7 +498,7 @@ count1=1
 # executor = concurrent.futures.ThreadPoolExecutor(max_workers=8)
 while(True):
     # ##print("a")
-    
+    print(count)
     ret, img=cap.read()
     timenow =datetime.now() + timedelta(hours=7)
     # if (cv2.waitKey(20) & 0xFF == ord('q')):# if (cv2.waitKey(20) & 0xFF == ord('q')):
