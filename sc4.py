@@ -501,7 +501,9 @@ while(True):
     
     ret, img=cap.read()
     timenow =datetime.now() + timedelta(hours=7)
-    if (cv2.waitKey(20) & 0xFF == ord('q')):# if (cv2.waitKey(20) & 0xFF == ord('q')):
+    # if (cv2.waitKey(20) & 0xFF == ord('q')):# if (cv2.waitKey(20) & 0xFF == ord('q')):
+    bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
+    if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
         break
     # if (cv2.waitKey(20) & 0xFF == ord('q')) | (not ret):
     #     break
