@@ -513,7 +513,7 @@ while(True):
     else:
         if ret:
             print(count1)
-            imagescan(img, count1,timenow)
+            imagescan(img, count1,timenow,)
             # _thread.start_new_thread(imagescan, (img, count1,timenow))
         else:
             client = pymongo.MongoClient(
