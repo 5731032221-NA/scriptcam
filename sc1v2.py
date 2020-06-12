@@ -513,7 +513,7 @@ def imagescan(frame, count,now):
                     
                     response=apidetect(name)
                     detect=response.json()
-                    
+                    print("detect3",detect)
                     if(detect != []):
                         arrfaceid=[]
                         for face in detect:
@@ -553,7 +553,7 @@ def imagescan(frame, count,now):
                     else:
                         response=apidetect2(name)
                         detect=response.json()
-                        
+                        print("detect4",detect)
                         if(detect != []):
                             arrfaceid=[]
                             for face in detect:
