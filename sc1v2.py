@@ -34,7 +34,7 @@ subscription_key = '99d0310d30c24046a148cbf795a34121'
 
 blob_service_client = BlobServiceClient.from_connection_string(
     "DefaultEndpointsProtocol=https;AccountName=oneteamblob;AccountKey=qcv7bSwg5vFNZRt1gY9XLPcv6OWKdKakKCj5znpUQRNQTPAOkLbhnCuZpt/1m4Gc9f5tV55x0CEzcVWjCubTaQ==;EndpointSuffix=core.windows.net")
-cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
+# cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
 
 # Create a unique name for the container
 container_name = "facedetection"
@@ -716,27 +716,28 @@ def imagescan(frame, count,now):
 
 count1=1
 while(True):
-    ret, img=cap.read()
-    timenow =datetime.now() + timedelta(hours=7)
-    bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
-    if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
-    # if ((cv2.waitKey(20) & 0xFF == ord('q'))):
-        break
-    else:
-        if ret:
-            _thread.start_new_thread(imagescan, (img, count1,timenow))
-        else:
-            client = pymongo.MongoClient(
-                "mongodb://127.0.0.1:27017")
-            db2 = client.errorlog
-            errdate = (datetime.now() + timedelta(hours=7))
-            db2.python[errdate.strftime("%Y-%m-%d")].insert_one({
-                "datetime": errdate.strftime("%Y%m%d%H%M%S"),
-                "message": "Camera 1 not avaliable"
-            }
-            )
+    cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
+    while(True):
+        ret, img=cap.read()
+        timenow =datetime.now() + timedelta(hours=7)
+        bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
+        if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
+        # if ((cv2.waitKey(20) & 0xFF == ord('q'))):
             break
-    count1=count1 + 1
-
-cap.release()
-cv2.destroyAllWindows()
+        else:
+            if ret:
+                _thread.start_new_thread(imagescan, (img, count1,timenow))
+            else:
+                client = pymongo.MongoClient(
+                    "mongodb://127.0.0.1:27017")
+                db2 = client.errorlog
+                errdate = (datetime.now() + timedelta(hours=7))
+                db2.python[errdate.strftime("%Y-%m-%d")].insert_one({
+                    "datetime": errdate.strftime("%Y%m%d%H%M%S"),
+                    "message": "Camera 1 not avaliable"
+                }
+                )
+                break
+        count1=count1 + 1
+    cap.release()
+    cv2.destroyAllWindows()
