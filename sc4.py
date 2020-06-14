@@ -126,7 +126,8 @@ def infocrop(name,now,detectname,confidence):
         "datetime": now.strftime("%Y%m%d%H%M%S"),
         "detected": detectname,
         "confidence": confidence,
-        "train": ''
+        "train": '',
+        "camera": 4
     }
     )
 
