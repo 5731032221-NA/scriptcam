@@ -415,6 +415,13 @@ def imagescan(frame, count,now):
                 cv2.imwrite("data/"+name, frame)
 
                 storeblob(name)
+                framesize = os.path.getsize("data/"+name)
+                if(framesize > 200000):
+                    print("not gray")
+                else:
+                    requests.get('http://localhost:3000/frameerror/1')
+                    os.remove("data/"+name)
+            return False
                 sent = 1
                 response=apidetect(name)
                 detect=response.json()
@@ -511,6 +518,13 @@ def imagescan(frame, count,now):
                     cv2.imwrite("data/"+name, frame)
 
                     storeblob(name)
+                    framesize = os.path.getsize("data/"+name)
+                    if(framesize > 200000):
+                        print("not gray")
+                    else:
+                        requests.get('http://localhost:3000/frameerror/1')
+                        os.remove("data/"+name)
+                        return False
                     
                     response=apidetect(name)
                     detect=response.json()
