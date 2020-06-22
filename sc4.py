@@ -409,7 +409,7 @@ def imagescan(frame, count,now):
         if(framesize > 200000):
             print("not gray")
         else:
-            requests.get('http://localhost:3000/frameerror/2')
+            requests.get('http://localhost:3000/frameerror/4')
             os.remove("data/"+name)
             return False
         # sent = 1
