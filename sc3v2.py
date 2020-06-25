@@ -603,8 +603,9 @@ def imagescan(frame, count,now):
 
 
 count1=1
-
+print("new running")
 while(True):
+    print("connect camera...")
     cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.16:8554/stream0/out.h264")
     while(True):
         ret, img=cap.read()
