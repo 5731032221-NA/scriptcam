@@ -617,6 +617,7 @@ while(True):
             if ret:
                 _thread.start_new_thread(imagescan, (img, count1,timenow))
             else:
+                print("camera err.")
                 client = pymongo.MongoClient(
                     "mongodb://127.0.0.1:27017")
                 db2 = client.errorlog
