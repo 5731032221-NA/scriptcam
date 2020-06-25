@@ -421,7 +421,7 @@ def imagescan(frame, count,now):
                 else:
                     requests.get('http://localhost:3000/frameerror/1')
                     os.remove("data/"+name)
-            return False
+                    return False
                 sent = 1
                 response=apidetect(name)
                 detect=response.json()
