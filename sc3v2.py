@@ -386,7 +386,13 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
 #     }
 #     )
     
-    
+def getprofile(faceid):
+    client = pymongo.MongoClient(
+            "mongodb://127.0.0.1:27017")
+    db_profile = client.mea
+    query_faceid = {"faceid": faceid}
+    profile_data = db_profile.profile.find_one(query_faceid, {'id': 1,'_id':0,'encimage': 0})
+    return profile_data
 
 
 def imagescan(frame, count,now):
@@ -443,7 +449,9 @@ def imagescan(frame, count,now):
                         name_crop=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop,now)
-                        if(identify[index][u'candidates'][0][u'confidence'] > 0.55):
+                        prof = getprofile(identify[index][u'candidates'][0][u'personId'])
+                        conf = prof['individual_confidence']
+                        if(identify[index][u'candidates'][0][u'confidence'] > conf):
 
                             person=requests.get(uriPerson,  headers = header)
                             nameperson=person.json()[u'name']
@@ -480,8 +488,9 @@ def imagescan(frame, count,now):
                                                 3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
                             name_crop=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
-                            storecrop(name_crop,now)
-                            if(identify[index][u'candidates'][0][u'confidence'] > 0.55):
+                            prof = getprofile(identify[index][u'candidates'][0][u'personId'])
+                            conf = prof['individual_confidence']
+                            if(identify[index][u'candidates'][0][u'confidence'] > conf):
 
                                 person=requests.get(uriPerson,  headers = header)
                                 nameperson=person.json()[u'name']
@@ -544,7 +553,9 @@ def imagescan(frame, count,now):
                             name_crop=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop,now)
-                            if(identify[index][u'candidates'][0][u'confidence'] > 0.55):
+                            prof = getprofile(identify[index][u'candidates'][0][u'personId'])
+                            conf = prof['individual_confidence']
+                            if(identify[index][u'candidates'][0][u'confidence'] > conf):
         
                                 person=requests.get(uriPerson,  headers = header)
                                 nameperson=person.json()[u'name']
@@ -581,7 +592,9 @@ def imagescan(frame, count,now):
                                 name_crop=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                                 cv2.imwrite("data/"+name_crop, crop_img)
                                 storecrop(name_crop,now)
-                                if(identify[index][u'candidates'][0][u'confidence'] > 0.55):
+                                prof = getprofile(identify[index][u'candidates'][0][u'personId'])
+                                conf = prof['individual_confidence']
+                                if(identify[index][u'candidates'][0][u'confidence'] > conf):
                                     person=requests.get(uriPerson,  headers = header)
                                     nameperson=person.json()[u'name']
                                     mongodetect2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
