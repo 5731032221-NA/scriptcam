@@ -621,28 +621,27 @@ while(True):
     print("connect camera...")
     cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.16:8554/stream0/out.h264")
     while(True):
-        if (count1 % 36) == 0:
-            ret, img=cap.read()
-            timenow =datetime.now() + timedelta(hours=7)
-            bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
-            if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
-            # if ((cv2.waitKey(20) & 0xFF == ord('q'))):
-                break
+        ret, img=cap.read()
+        timenow =datetime.now() + timedelta(hours=7)
+        bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
+        if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
+        # if ((cv2.waitKey(20) & 0xFF == ord('q'))):
+            break
+        else:
+            if ret:
+                _thread.start_new_thread(imagescan, (img, count1,timenow))
             else:
-                if ret:
-                    _thread.start_new_thread(imagescan, (img, count1,timenow))
-                else:
-                    print("camera err.")
-                    client = pymongo.MongoClient(
-                        "mongodb://127.0.0.1:27017")
-                    db2 = client.errorlog
-                    errdate = (datetime.now() + timedelta(hours=7))
-                    db2.python[errdate.strftime("%Y-%m-%d")].insert_one({
-                        "datetime": errdate.strftime("%Y%m%d%H%M%S"),
-                        "message": "Camera 3 not avaliable"
-                    }
-                    )
-                    break
+                print("camera err.")
+                client = pymongo.MongoClient(
+                    "mongodb://127.0.0.1:27017")
+                db2 = client.errorlog
+                errdate = (datetime.now() + timedelta(hours=7))
+                db2.python[errdate.strftime("%Y-%m-%d")].insert_one({
+                    "datetime": errdate.strftime("%Y%m%d%H%M%S"),
+                    "message": "Camera 3 not avaliable"
+                }
+                )
+                break
         count1=count1 + 1
     # cap.release()
     # cv2.destroyAllWindows()
