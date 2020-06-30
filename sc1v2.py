@@ -482,6 +482,7 @@ def imagescan(frame, count,now):
                             os.remove("data/"+name_crop)
 
                 os.remove("data/"+name)
+                print("done1")
         if(sent == 0):
             body = frontalface_alt.detectMultiScale(img,1.08,1 )
             for (x, y, w, h) in body:
@@ -591,6 +592,7 @@ def imagescan(frame, count,now):
                                 os.remove("data/"+name_crop)
 
                     os.remove("data/"+name)
+                    print("done2")
     
 
 
