@@ -391,7 +391,7 @@ def getprofile(faceid):
             "mongodb://127.0.0.1:27017")
     db_profile = client.mea
     query_faceid = {"faceid": faceid}
-    profile_data = db_profile.profile.find_one(query_faceid, {'id': 1,'_id':0,'encimage': 0})
+    profile_data = db_profile.profile.find_one(query_faceid, {'_id':0,'encimage': 0})
     return profile_data
 
 
