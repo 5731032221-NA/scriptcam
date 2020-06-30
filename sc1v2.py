@@ -517,8 +517,8 @@ def imagescan(frame, count,now):
             for (x, y, w, h) in body:
                 cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
         #         cv2.imwrite('my.jpg', img)
-                roi_gray = gray[y:y+h, x:x+w]
-                roi_color = img[y:y+h, x:x+w]
+                roi_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)[y:y+h, x:x+w]
+                # roi_color = img[y:y+h, x:x+w]
                 eyel = face_cascade.detectMultiScale(roi_gray,1.08,)
                 if((eyel is not ())):
                     # now=datetime.now() + timedelta(hours=7)
