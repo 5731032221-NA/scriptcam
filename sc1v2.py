@@ -401,7 +401,7 @@ def imagescan(frame, count,now):
             #time.sleep(count/60)
             # frame=resize(img)
             # frame = img
-        print(frame.shape)
+        # print(frame.shape)
         sent = 0
         gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces=face_cascade.detectMultiScale(gray, 1.1, 4)
@@ -747,7 +747,7 @@ count1=1
 print("new running")
 while(True):
     print("connect camera...")
-    cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
+    cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264",1)
     while(True):
         ret, img=cap.read()
         timenow =datetime.now() + timedelta(hours=7)
