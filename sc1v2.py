@@ -771,5 +771,5 @@ while(True):
                 )
                 break
         count1=count1 + 1
-    cap.release()
-    cv2.destroyAllWindows()
+    # cap.release()
+    # cv2.destroyAllWindows()
