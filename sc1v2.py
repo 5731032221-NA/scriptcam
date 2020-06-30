@@ -3,11 +3,7 @@ import dlib
 import sys 
 from datetime import  timedelta, datetime, date, time as t2
 import time
-# timenow =datetime.now() + timedelta(hours=7)
-# bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(12,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
-# if (not bool1):
-#     time.sleep(900)
-#     sys.exit()
+
 import numpy as np
 import cv2
 import os
@@ -366,31 +362,7 @@ def getprofile(faceid):
     query_faceid = {"faceid": faceid}
     profile_data = db_profile.profile.find_one(query_faceid, {'_id':0,'encimage': 0})
     return profile_data
-# def mongodetectlower5(now,timei, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
-#     client = pymongo.MongoClient(
-#             "mongodb://127.0.0.1:27017")
-#     today = now.strftime("%Y-%m-%d")
-#     db2 = client.detect
-#     emo = getemo(faceAttributes['emotion'])
-#     db2.detect[today].insert_one(
-#     {
-#       "id": "-",
-#         "checkin": checkin,
-#         "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
-#         # "checkinMonth": today.strftime("%Y-%m"),
-#         "checkinEmotion": faceAttributes,
-#         "checkinEmo": emo,
-#         "checkinImageCrop": imageCropUrl,
-#         "camerain": 1,
-#         "checkout": "",
-#         "checkoutEmotion": {"gender":"","age":0},
-#         "checkoutEmo": "",
-#         "checkoutImageCrop": "",
-#         "cameraout": 0,
-#         "checkoutdatetime": "",
-#         # "checkoutMonth":""
-#     }
-#     )
+
     
     
 
@@ -398,10 +370,7 @@ def getprofile(faceid):
 def imagescan(frame, count,now):
     if (count % 36) == 0:
         print("count",count)
-            #time.sleep(count/60)
-            # frame=resize(img)
-            # frame = img
-        # print(frame.shape)
+
         sent = 0
         gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces=face_cascade.detectMultiScale(gray, 1.1, 4)
@@ -560,6 +529,7 @@ def imagescan(frame, count,now):
                             conf = prof['individual_confidence']
                             if(identify[index][u'candidates'][0][u'confidence'] > conf):
                                 person=requests.get(uriPerson,  headers = header)
+                                print(person)
                                 nameperson=person.json()[u'name']
                                 mongodetect(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                                 "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
@@ -574,6 +544,7 @@ def imagescan(frame, count,now):
                                 # "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                                 # infocrop(name_crop,now,"",0)
                                 person=requests.get(uriPerson,  headers = header)
+                                print(person)
                                 nameperson=person.json()[u'name']
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])  
                             os.remove("data/"+name_crop)
@@ -601,6 +572,7 @@ def imagescan(frame, count,now):
                                 conf = prof['individual_confidence']
                                 if(identify[index][u'candidates'][0][u'confidence'] > conf):
                                     person=requests.get(uriPerson,  headers = header)
+                                    print(person)
                                     nameperson=person.json()[u'name']
                                     mongodetect2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
@@ -613,6 +585,7 @@ def imagescan(frame, count,now):
                                 else:
                                     # infocrop(name_crop,now,"",0) 
                                     person=requests.get(uriPerson,  headers = header)
+                                    print(person)
                                     nameperson=person.json()[u'name']
                                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                 os.remove("data/"+name_crop)
@@ -772,5 +745,3 @@ while(True):
                 )
                 break
         count1=count1 + 1
-    # cap.release()
-    # cv2.destroyAllWindows()

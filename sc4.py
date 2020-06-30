@@ -398,10 +398,10 @@ def imagescan(frame, count,now):
     face_detect = dlib.get_frontal_face_detector()
     rects = face_detect(gray, 0)
     now2=datetime.now() + timedelta(hours=7)
-    print("rects",rects,now,now2)
+    # print("rects",rects,now,now2)
     # if(rects is not ()):
     # print("rects",rects)
-    print("rects len",len(rects))
+    # print("rects len",len(rects))
     if(len(rects) > 0):
         # if(len(faces) > 0):
             # now=datetime.now() + timedelta(hours=7)
@@ -429,7 +429,7 @@ def imagescan(frame, count,now):
                 arrfaceid.append(face[u'faceId'])
             response=apiidentify(name, arrfaceid)
             identify=response.json()
-            print(identify)
+            # print(identify)
             for index, iden in enumerate(identify):
                 uriPerson='https://meafacedetection.cognitiveservices.azure.com/face/v1.0/persongroups/mea/persons/' + \
                     str(json.dumps(identify[index][u'candidates'][0][u'personId'])).replace(
@@ -470,7 +470,7 @@ def imagescan(frame, count,now):
                     arrfaceid.append(face[u'faceId'])
                 response=apiidentify(name, arrfaceid)
                 identify=response.json()
-                print(identify)
+                # print(identify)
                 for index, iden in enumerate(identify):
                     uriPerson='https://meafacedetection.cognitiveservices.azure.com/face/v1.0/persongroups/mea/persons/' + \
                         str(json.dumps(identify[index][u'candidates'][index][u'personId'])).replace(
@@ -481,7 +481,7 @@ def imagescan(frame, count,now):
                     name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                     cv2.imwrite("data/"+name_crop, crop_img)
                     storecrop(name_crop,now)
-                    print(identify[index][u'candidates'][0][u'personId'])
+                    # print(identify[index][u'candidates'][0][u'personId'])
                     prof = getprofile(identify[index][u'candidates'][0][u'personId'])
                     conf = prof['individual_confidence']
                     if(identify[index][u'candidates'][0][u'confidence'] > conf):
