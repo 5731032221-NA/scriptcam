@@ -621,7 +621,7 @@ while(True):
     print("connect camera...")
     cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.16:8554/stream0/out.h264")
     while(True):
-        if (count % 36) == 0:
+        if (count1 % 36) == 0:
             ret, img=cap.read()
             timenow =datetime.now() + timedelta(hours=7)
             bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
