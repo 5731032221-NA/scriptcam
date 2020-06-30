@@ -405,8 +405,8 @@ def imagescan(frame, count,now):
         # gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces=face_cascade.detectMultiScale(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY), 1.1, 4)
         for (x, y, w, h) in faces:
-            roi_gray = gray[y:y+h, x:x+w]
-            roi_color = img[y:y+h, x:x+w]
+            roi_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)[y:y+h, x:x+w]
+            # roi_color = frame[y:y+h, x:x+w]
             eyel = left_eye_cascade.detectMultiScale(roi_gray)
         #     for (ex,ey,ew,eh) in eyel:
         #         cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
