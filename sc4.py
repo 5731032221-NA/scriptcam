@@ -442,7 +442,7 @@ def imagescan(frame, count,now):
                 storecrop(name_crop,now)
                 prof = getprofile(identify[index][u'candidates'][0][u'personId'])
                 conf = prof['individual_confidence']
-                if(identify[index][u'candidates'][0][u'confidence'] > conf):
+                if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
                     person=requests.get(uriPerson,  headers = header)
                     nameperson=person.json()[u'name']
                     mongodetect(now,now.strftime("%H:%M"),nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
@@ -484,7 +484,7 @@ def imagescan(frame, count,now):
                     # print(identify[index][u'candidates'][0][u'personId'])
                     prof = getprofile(identify[index][u'candidates'][0][u'personId'])
                     conf = prof['individual_confidence']
-                    if(identify[index][u'candidates'][0][u'confidence'] > conf):
+                    if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
 
                         person=requests.get(uriPerson,  headers = header)
                         nameperson=person.json()[u'name']
