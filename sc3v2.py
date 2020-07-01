@@ -449,9 +449,10 @@ def imagescan(frame, count,now):
                         name_crop=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop,now)
+                        
                         prof = getprofile(identify[index][u'candidates'][0][u'personId'])
                         conf = prof['individual_confidence']
-                        if(identify[index][u'candidates'][0][u'confidence'] > conf):
+                        if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
 
                             person=requests.get(uriPerson,  headers = header)
                             nameperson=person.json()[u'name']
@@ -490,7 +491,7 @@ def imagescan(frame, count,now):
                             cv2.imwrite("data/"+name_crop, crop_img)
                             prof = getprofile(identify[index][u'candidates'][0][u'personId'])
                             conf = prof['individual_confidence']
-                            if(identify[index][u'candidates'][0][u'confidence'] > conf):
+                            if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
 
                                 person=requests.get(uriPerson,  headers = header)
                                 nameperson=person.json()[u'name']
@@ -555,7 +556,7 @@ def imagescan(frame, count,now):
                             storecrop(name_crop,now)
                             prof = getprofile(identify[index][u'candidates'][0][u'personId'])
                             conf = prof['individual_confidence']
-                            if(identify[index][u'candidates'][0][u'confidence'] > conf):
+                            if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
         
                                 person=requests.get(uriPerson,  headers = header)
                                 nameperson=person.json()[u'name']
@@ -594,7 +595,7 @@ def imagescan(frame, count,now):
                                 storecrop(name_crop,now)
                                 prof = getprofile(identify[index][u'candidates'][0][u'personId'])
                                 conf = prof['individual_confidence']
-                                if(identify[index][u'candidates'][0][u'confidence'] > conf):
+                                if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
                                     person=requests.get(uriPerson,  headers = header)
                                     nameperson=person.json()[u'name']
                                     mongodetect2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
