@@ -17,7 +17,6 @@ import base64
 from io import BytesIO
 from PIL import Image
 from pkcs7 import PKCS7Encoder
-
 import _thread
 
 import requests
@@ -367,10 +366,11 @@ def getprofile(faceid):
     
 
 
-def imagescan(frame, count,now):
+def imagescan(img, count,now):
     if (count % 36) == 0:
         print("count",count)
-
+        cv2.imwrite("data/"+name, img)
+        frame = cv2.imread("data/"+name)
         sent = 0
         gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces=face_cascade.detectMultiScale(gray, 1.1, 4)
@@ -389,7 +389,7 @@ def imagescan(frame, count,now):
                 # today=date.today() + timedelta(hours=7)
                 current_time=now.strftime("%H%M%S")
                 name=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+".jpg"
-                cv2.imwrite("data/"+name, frame)
+                # cv2.imwrite("data/"+name, frame)
 
                 storeblob(name)
                 framesize = os.path.getsize("data/"+name)
@@ -481,7 +481,7 @@ def imagescan(frame, count,now):
                                 infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])  
                             os.remove("data/"+name_crop)
 
-                os.remove("data/"+name)
+                # os.remove("data/"+name)
                 print("done1")
         if(sent == 0):
             body = frontalface_alt.detectMultiScale(img,1.08,1 )
@@ -496,7 +496,7 @@ def imagescan(frame, count,now):
                 # today=date.today() + timedelta(hours=7)
                     current_time=now.strftime("%H%M%S")
                     name=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+".jpg"
-                    cv2.imwrite("data/"+name, frame)
+                    # cv2.imwrite("data/"+name, frame)
 
                     storeblob(name)
                     framesize = os.path.getsize("data/"+name)
@@ -591,132 +591,13 @@ def imagescan(frame, count,now):
                                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                 os.remove("data/"+name_crop)
 
-                    os.remove("data/"+name)
+                    # os.remove("data/"+name)
                     print("done2")
+        os.remove("data/"+name)
     
 
 
-        # if(sent == 0):
-        #     body = frontalface_alt.detectMultiScale(img,1.08,1 )
-        #     for (x, y, w, h) in body:
-        #         cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
-        # #         cv2.imwrite('my.jpg', img)
-        #         roi_gray = gray[y:y+h, x:x+w]
-        #         roi_color = img[y:y+h, x:x+w]
-        #         eyel = face_cascade.detectMultiScale(roi_gray,1.08,)
-        #         if((eyel is not ())):
-        #             # now=datetime.now() + timedelta(hours=7)
-        #         # today=date.today() + timedelta(hours=7)
-        #             current_time=now.strftime("%H%M%S")
-        #             name=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+".jpg"
-        #             cv2.imwrite("data/"+name, frame)
-
-        #             storeblob(name)
-                    
-        #             response=apidetect(name)
-        #             detect=response.json()
-                    
-        #             if(detect != []):
-        #                 arrfaceid=[]
-        #                 for face in detect:
-        #                     arrfaceid.append(face[u'faceId'])
-        #                 response=apiidentify(name, arrfaceid)
-        #                 identify=response.json()
-        #                 for index, iden in enumerate(identify):
-        #                     uriPerson='https://meafacedetection.cognitiveservices.azure.com/face/v1.0/persongroups/mea/persons/' + \
-        #                         str(json.dumps(identify[index][u'candidates'][0][u'personId'])).replace(
-        #                             '"', '')
-        #                     header={'Ocp-Apim-Subscription-Key': subscription_key}
-        #                     crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
-        #                                         3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-        #                     name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+str(index)+"-crop.jpg"
-        #                     cv2.imwrite("data/"+name_crop, crop_img)
-        #                     storecrop(name_crop,now)
-        #                     if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
-        
-        #                         person=requests.get(uriPerson,  headers = header)
-        #                         nameperson=person.json()[u'name']
-        #                         mongodetect(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-        #                         "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-        #                         mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-        #                             "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-        #                         # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
-        #                     #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-        #                         infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
-        #                         # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
-        #                     else:
-        #                         # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-        #                         # "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-        #                         # infocrop(name_crop,now,"",0)
-        #                         infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])  
-        #                     os.remove("data/"+name_crop)
-        #             else:
-        #                 response=apidetect2(name)
-        #                 detect=response.json()
-                        
-        #                 if(detect != []):
-        #                     arrfaceid=[]
-        #                     for face in detect:
-        #                         arrfaceid.append(face[u'faceId'])
-        #                     response=apiidentify(name, arrfaceid)
-        #                     identify=response.json()
-        #                     for index, iden in enumerate(identify):
-        #                         uriPerson='https://meafacedetection.cognitiveservices.azure.com/face/v1.0/persongroups/mea/persons/' + \
-        #                             str(json.dumps(identify[index][u'candidates'][0][u'personId'])).replace(
-        #                                 '"', '')
-        #                         header={'Ocp-Apim-Subscription-Key': subscription_key}
-        #                         crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
-        #                                             3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-        #                         name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+str(index)+"-crop.jpg"
-        #                         cv2.imwrite("data/"+name_crop, crop_img)
-        #                         storecrop(name_crop,now)
-        #                         if(identify[index][u'candidates'][0][u'confidence'] > 0.4):
-        #                             person=requests.get(uriPerson,  headers = header)
-        #                             nameperson=person.json()[u'name']
-        #                             mongodetect2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
-        #                             "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-        #                             # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-        #                             #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-        #                             mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
-        #                                 "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-        #                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
-        #                             # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
-        #                         else:
-        #                             # infocrop(name_crop,now,"",0) 
-        #                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
-        #                         os.remove("data/"+name_crop)
-
-        #             os.remove("data/"+name)
-   
-
-
-
-# gray = cv2.imread('images/face_detect_test.jpeg', 0)
-# im = np.float32(gray) / 255.0
-# # Calculate gradient 
-# gx = cv2.Sobel(im, cv2.CV_32F, 1, 0, ksize=1)
-# gy = cv2.Sobel(im, cv2.CV_32F, 0, 1, ksize=1)
-# mag, angle = cv2.cartToPolar(gx, gy, angleInDegrees=True)
-# # video_capture = cv2.VideoCapture(0)
-# flag = 0
-# face_detect = dlib.get_frontal_face_detector()
-# rects = face_detect(gray, 1)
-
-
-
-# while True:
-
-#     ret, frame = cap.read()
-
-#     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-#     rects = face_detect(gray, 1)
-#     print(rects)
-
-
-#     if cv2.waitKey(1) & 0xFF == ord('q'):
-#         break
-
-
+      
 
 count1=1
 print("new running")
