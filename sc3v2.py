@@ -624,6 +624,7 @@ def imagescan(img, count,now):
                                 os.remove("data/"+name_crop)
 
         os.remove("data/"+name)
+        print("done",count)
 
 
 

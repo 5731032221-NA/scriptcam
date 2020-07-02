@@ -595,7 +595,7 @@ def imagescan(img, count,now):
                     # os.remove("data/"+name)
                     print("done2")
         os.remove("data/"+name)
-    
+        print("done",count)
 
 
       
