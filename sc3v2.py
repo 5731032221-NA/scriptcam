@@ -395,9 +395,20 @@ def getprofile(faceid):
     return profile_data
 
 
-def imagescan(frame, count,now):
+def imagescan(img, count,now):
     if (count % 40 ) == 0:
         print("count",count)
+        current_time=now.strftime("%H%M%S")
+        name=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+".jpg"
+        cv2.imwrite("data/"+name, img)
+        frame = cv2.imread("data/"+name)
+        framesize = os.path.getsize("data/"+name)
+        if(framesize > 200000):
+            print("not gray")
+        else:
+            requests.get('http://localhost:3000/frameerror/1')
+            os.remove("data/"+name)
+            return False
         #time.sleep(count/60)
         # frame=resize(img)
         # frame = img
@@ -417,18 +428,18 @@ def imagescan(frame, count,now):
             # if(len(faces) > 0):
                 # now=datetime.now() + timedelta(hours=7)
                 # today=date.today() + timedelta(hours=7)
-                current_time=now.strftime("%H%M%S")
-                name=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+".jpg"
-                cv2.imwrite("data/"+name, frame)
+                # current_time=now.strftime("%H%M%S")
+                # name=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+".jpg"
+                # cv2.imwrite("data/"+name, frame)
 
                 storeblob(name)
-                framesize = os.path.getsize("data/"+name)
-                if(framesize > 200000):
-                    print("not gray")
-                else:
-                    requests.get('http://localhost:3000/frameerror/3')
-                    os.remove("data/"+name)
-                    return False
+                # framesize = os.path.getsize("data/"+name)
+                # if(framesize > 200000):
+                #     print("not gray")
+                # else:
+                #     requests.get('http://localhost:3000/frameerror/3')
+                #     os.remove("data/"+name)
+                #     return False
                 sent = 1
                 response=apidetect(name)
                 detect=response.json()
@@ -522,19 +533,19 @@ def imagescan(frame, count,now):
                 if((eyel is not ())):
                     # now=datetime.now() + timedelta(hours=7)
                 # today=date.today() + timedelta(hours=7)
-                    current_time=now.strftime("%H%M%S")
-                    name=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+".jpg"
-                    cv2.imwrite("data/"+name, frame)
+                    # current_time=now.strftime("%H%M%S")
+                    # name=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+".jpg"
+                    # cv2.imwrite("data/"+name, frame)
 
                     storeblob(name)
                     
-                    framesize = os.path.getsize("data/"+name)
-                    if(framesize > 200000):
-                        print("not gray")
-                    else:
-                        requests.get('http://localhost:3000/frameerror/3')
-                        os.remove("data/"+name)
-                        return False
+                    # framesize = os.path.getsize("data/"+name)
+                    # if(framesize > 200000):
+                    #     print("not gray")
+                    # else:
+                    #     requests.get('http://localhost:3000/frameerror/3')
+                    #     os.remove("data/"+name)
+                    #     return False
                     response=apidetect(name)
                     detect=response.json()
                     
@@ -612,7 +623,7 @@ def imagescan(frame, count,now):
                                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                                 os.remove("data/"+name_crop)
 
-                    os.remove("data/"+name)
+        os.remove("data/"+name)
 
 
 

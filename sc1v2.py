@@ -373,6 +373,13 @@ def imagescan(img, count,now):
         name=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+".jpg"
         cv2.imwrite("data/"+name, img)
         frame = cv2.imread("data/"+name)
+        framesize = os.path.getsize("data/"+name)
+        if(framesize > 200000):
+            print("not gray")
+        else:
+            requests.get('http://localhost:3000/frameerror/1')
+            os.remove("data/"+name)
+            return False
         sent = 0
         gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces=face_cascade.detectMultiScale(gray, 1.1, 4)
@@ -393,13 +400,6 @@ def imagescan(img, count,now):
                 # cv2.imwrite("data/"+name, frame)
 
                 storeblob(name)
-                framesize = os.path.getsize("data/"+name)
-                if(framesize > 200000):
-                    print("not gray")
-                else:
-                    requests.get('http://localhost:3000/frameerror/1')
-                    os.remove("data/"+name)
-                    return False
                 sent = 1
                 response=apidetect(name)
                 detect=response.json()
@@ -500,13 +500,13 @@ def imagescan(img, count,now):
                     # cv2.imwrite("data/"+name, frame)
 
                     storeblob(name)
-                    framesize = os.path.getsize("data/"+name)
-                    if(framesize > 200000):
-                        print("not gray")
-                    else:
-                        requests.get('http://localhost:3000/frameerror/1')
-                        os.remove("data/"+name)
-                        return False
+                    # framesize = os.path.getsize("data/"+name)
+                    # if(framesize > 200000):
+                    #     print("not gray")
+                    # else:
+                    #     requests.get('http://localhost:3000/frameerror/1')
+                    #     os.remove("data/"+name)
+                    #     return False
                     
                     response=apidetect(name)
                     detect=response.json()

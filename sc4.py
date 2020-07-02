@@ -380,45 +380,36 @@ def getprofile(faceid):
     profile_data = db_profile.profile.find_one(query_faceid, {'_id':0,'encimage': 0})
     return profile_data
 
-def imagescan(frame, count,now):
-    # print("cc",count)
-    # if (count % 15) == 0:
+def imagescan(img, count,now):
     print("count",count)
-    #time.sleep(count/60)
-    # frame=resize(img)
-    # frame = img
+    current_time=now.strftime("%H%M%S")
+    name=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+".jpg"
+    cv2.imwrite("data/"+name, img)
+    frame = cv2.imread("data/"+name)
+    framesize = os.path.getsize("data/"+name)
+    if(framesize > 200000):
+        print("not gray")
+    else:
+        requests.get('http://localhost:3000/frameerror/1')
+        os.remove("data/"+name)
+        return False
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    # im = np.float32(gray) / 255.0
-    # Calculate gradient 
-    # gx = cv2.Sobel(im, cv2.CV_32F, 1, 0, ksize=1)
-    # gy = cv2.Sobel(im, cv2.CV_32F, 0, 1, ksize=1)
-    # mag, angle = cv2.cartToPolar(gx, gy, angleInDegrees=True)
-    # # video_capture = cv2.VideoCapture(0)
-    # flag = 0
     face_detect = dlib.get_frontal_face_detector()
     rects = face_detect(gray, 0)
     now2=datetime.now() + timedelta(hours=7)
-    # print("rects",rects,now,now2)
-    # if(rects is not ()):
-    # print("rects",rects)
-    # print("rects len",len(rects))
     if(len(rects) > 0):
-        # if(len(faces) > 0):
-            # now=datetime.now() + timedelta(hours=7)
-            # today=date.today() + timedelta(hours=7)
-        
         current_time=now.strftime("%H%M%S")
-        name=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+".jpg"
-        cv2.imwrite("data/"+name, frame)
+        # name=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+".jpg"
+        # cv2.imwrite("data/"+name, frame)
 
         storeblob(name)
-        framesize = os.path.getsize("data/"+name)
-        if(framesize > 200000):
-            print("not gray")
-        else:
-            requests.get('http://localhost:3000/frameerror/4')
-            os.remove("data/"+name)
-            return False
+        # framesize = os.path.getsize("data/"+name)
+        # if(framesize > 200000):
+        #     print("not gray")
+        # else:
+        #     requests.get('http://localhost:3000/frameerror/4')
+        #     os.remove("data/"+name)
+        #     return False
         # sent = 1
         response=apidetect(name)
         detect=response.json()
@@ -452,9 +443,6 @@ def imagescan(frame, count,now):
                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                     requests.get('http://localhost:3000/walkoutalertbyid/'+nameperson)
                 else:
-                    # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-                    #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                    # infocrop(name_crop,now,"",0)
                     person=requests.get(uriPerson,  headers = header)
                     nameperson=person.json()[u'name']
                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])   
@@ -503,17 +491,10 @@ def imagescan(frame, count,now):
                         infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                     os.remove("data/"+name_crop)
             
-        os.remove("data/"+name)
+    os.remove("data/"+name)
 
 
-# now=datetime.now() + timedelta(hours=7)
-
-# current_time=now.strftime("%H%M%S")
-# print((int(t2(20,00).strftime("%H%M"))<int( (datetime.now() + timedelta(hours=7)).strftime("%H%M")) ))
-
-#print(int(t2(12, 30).strftime("%H%M")) > int(datetime.now().strftime("%H%M")))
 count1=1
-# executor = concurrent.futures.ThreadPoolExecutor(max_workers=8)
 while(True):
     cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.17:8554/stream0/out.h264")
     while(True):
@@ -525,11 +506,6 @@ while(True):
         bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
         if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
             break
-        # if (cv2.waitKey(20) & 0xFF == ord('q')) | (not ret):
-        #     break
-        # asyncio.run(imagescan(img, count1))
-        # executor.submit(asyncio.run(imagescan(img, count1)))
-        # executor.submit(imagescan(img, count1))
         else:
             if ret:
                 print(count1)
@@ -547,5 +523,3 @@ while(True):
                 )
                 break
         count1=count1 + 1
-    # cap.release()
-    # cv2.destroyAllWindows()

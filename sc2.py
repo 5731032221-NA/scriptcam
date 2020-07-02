@@ -9,19 +9,10 @@ import pymongo
 from Crypto.Cipher import AES
 from Crypto import Random
 import base64
-# import io
 from io import BytesIO
 from PIL import Image
 from pkcs7 import PKCS7Encoder
-# from io import StringIO
-# import sys
-# import os
 
-# sys.stdout = open(os.devnull, "w")
-
-# import asyncio
-
-# import concurrent.futures
 import _thread
 
 import requests
@@ -29,56 +20,12 @@ import json
 from datetime import  timedelta, datetime, date, time as t2
 import time
 from random import randint
-# set to your own subscription key value
 subscription_key = '99d0310d30c24046a148cbf795a34121'
-# key = Random.new().read(AES.block_size)
-# iv = Random.new().read(AES.block_size)
-# import sys
-# sys.stderr = object
-
-# from cryptemis import Cryptemis
-# KEEP_FILENAME = True
-# PASSWORD = 'my_super_password'
-# ENCRYPT = True
-# DECRYPT = False
-# import pyAesCrypt
-# from os import stat, remove
-# bufferSize = 64 * 1024
-# password = "foopassword"
-# try:
-    ##print("Azure Blob storage v12 - Python quickstart sample")
-    # Quick start code goes here
-# except Exception as ex:
-    ##print('Exception:')
-    ##print(ex)
-
-# Create the BlobServiceClient object which will be used to create a container client
 blob_service_client = BlobServiceClient.from_connection_string(
     "DefaultEndpointsProtocol=https;AccountName=oneteamblob;AccountKey=qcv7bSwg5vFNZRt1gY9XLPcv6OWKdKakKCj5znpUQRNQTPAOkLbhnCuZpt/1m4Gc9f5tV55x0CEzcVWjCubTaQ==;EndpointSuffix=core.windows.net")
 
-# Create a unique name for the container
 container_name = "facedetection"
-# count2 = 1
-#print("cap")
 
-
-# face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-# left_eye_cascade = cv2.CascadeClassifier('haarcascade_lefteye_2splits.xml')
-# right_eye_cascade = cv2.CascadeClassifier('haarcascade_righteye_2splits.xml')
-# frontalface_alt = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
-# cap = cv2.VideoCapture(   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov")
-# cap = cv2.VideoCapture("20200108v2.mp4")
-# cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.15:8554/stream0/out.h264")
-
-
-
-# def resize(img):
-#     scale_percent = 80  # percent of original size
-#     width = int(img.shape[1] * scale_percent / 100)
-#     height = int(img.shape[0] * scale_percent / 100)
-#     dim = (width, height)
-
-#     return cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
 
 def storeblob(name):
     print(name)
@@ -168,8 +115,6 @@ def apidetect2(name):
 
     params = {
         'returnFaceId': 'true',
-        # 'returnFaceLandmarks': 'true',
-        # 'returnFaceAttributes': 'emotion,gender,age,blur',
         'detectionModel': 'detection_02',
     }
     return requests.post(
@@ -235,14 +180,10 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
     emo = getemo(faceAttributes['emotion'])
     query = {"id": nameperson}
     queryy = db.checkin[today].find(query)
-    # # ##print(queryy.count())
     
 
 
     if(queryy.count() > 0):
-        # if(queryy[0]['cameraout'] > 0):    
-        #     tr = 1
-        # else: 
         db_default = client.mea
         query_default = {"id": nameperson}
         default_data = db_default.default.find_one(query_default)
@@ -260,17 +201,13 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
     db = client.checkin
-    # emo = getemo(faceAttributes['emotion'])
     query = {"id": nameperson}
     queryy = db.checkin[today].find(query)
-    # # ##print(queryy.count())
+
     
 
 
     if(queryy.count() > 0):
-        # if(queryy[0]['cameraout'] > 0):    
-        #     tr = 1
-        # else: 
         db_default = client.mea
         query_default = {"id": nameperson}
         default_data = db_default.default.find_one(query_default)
@@ -300,7 +237,6 @@ def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, i
                 "id": nameperson,
                 "checkin": "",
                 "checkindatetime": "",
-                # "checkinMonth": today.strftime("%Y-%m"),
                 "checkinEmotion": {"gender":"","age":0},
                 "checkinEmo": emo,
                 "checkinImageCrop": "",
@@ -311,7 +247,6 @@ def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, i
                 "checkoutImageCrop": imageCropUrl,
                 "cameraout": 2,
                 "checkoutdatetime": now.strftime("%Y%m%d%H%M%S"),
-                # "checkoutMonth":""
             },
                 upsert=True
             )   
@@ -332,7 +267,6 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
         "id": nameperson,
         "checkin": "",
         "checkindatetime": "",
-        # "checkinMonth": today.strftime("%Y-%m"),
         "checkinEmotion": {"gender":"","age":0},
         "checkinEmo": "",
         "checkinImageCrop": "",
@@ -343,36 +277,10 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
         "checkoutImageCrop": imageCropUrl,
         "cameraout": 2,
         "checkoutdatetime": now.strftime("%Y%m%d%H%M%S"),
-        # "checkoutMonth":""
     },
         upsert=True
     )
 
-# def mongodetectlower5(now,timei, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
-#     client = pymongo.MongoClient(
-#             "mongodb://127.0.0.1:27017")
-#     today = now.strftime("%Y-%m-%d")
-#     db2 = client.detect
-#     emo = getemo(faceAttributes['emotion'])
-#     db2.detect[today].insert_one(
-#     {
-#       "id": "-",
-#         "checkin": "",
-#         "checkindatetime": "",
-#         # "checkinMonth": today.strftime("%Y-%m"),
-#         "checkinEmotion": {"gender":"","age":0},
-#         "checkinEmo": "",
-#         "checkinImageCrop": "",
-#         "camerain": 0,
-#         "checkout": checkin,
-#         "checkoutEmotion": faceAttributes,
-#         "checkoutEmo": emo,
-#         "checkoutImageCrop": imageCropUrl,
-#         "cameraout": 2,
-#         "checkoutdatetime": now.strftime("%Y%m%d%H%M%S"),
-#         # "checkoutMonth":""
-#     }
-#     )
 def getprofile(faceid):
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
@@ -381,40 +289,35 @@ def getprofile(faceid):
     profile_data = db_profile.profile.find_one(query_faceid, {'_id':0,'encimage': 0})
     return profile_data
 
-def imagescan(frame, count,now):
-    # print("cc",count)
-    # if (count % 15) == 0:
+def imagescan(img, count,now):
     print("count",count)
-    #time.sleep(count/60)
-    # frame=resize(img)
-    # frame = img
+    current_time=now.strftime("%H%M%S")
+    name=now.strftime("%Y-%m-%d")+"-2-"+current_time+str(count%60)+".jpg"
+    cv2.imwrite("data/"+name, img)
+    frame = cv2.imread("data/"+name)
+    framesize = os.path.getsize("data/"+name)
+    if(framesize > 200000):
+        print("not gray")
+    else:
+        requests.get('http://localhost:3000/frameerror/1')
+        os.remove("data/"+name)
+        return False
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    # im = np.float32(gray) / 255.0
-    # # Calculate gradient 
-    # gx = cv2.Sobel(im, cv2.CV_32F, 1, 0, ksize=1)
-    # gy = cv2.Sobel(im, cv2.CV_32F, 0, 1, ksize=1)
-    # mag, angle = cv2.cartToPolar(gx, gy, angleInDegrees=True)
-    # # video_capture = cv2.VideoCapture(0)
-    # flag = 0
     face_detect = dlib.get_frontal_face_detector()
     rects = face_detect(gray, 1)
-    # print("rects",rects)
     if(len(rects) > 0):
-        # if(len(faces) > 0):
-            # now=datetime.now() + timedelta(hours=7)
-            # today=date.today() + timedelta(hours=7)
         current_time=now.strftime("%H%M%S")
-        name=now.strftime("%Y-%m-%d")+"-2-"+current_time+str(count%60)+".jpg"
-        cv2.imwrite("data/"+name, frame)
+        # name=now.strftime("%Y-%m-%d")+"-2-"+current_time+str(count%60)+".jpg"
+        # cv2.imwrite("data/"+name, frame)
 
         storeblob(name)
-        framesize = os.path.getsize("data/"+name)
-        if(framesize > 200000):
-            print("not gray")
-        else:
-            requests.get('http://localhost:3000/frameerror/2')
-            os.remove("data/"+name)
-            return False
+        # framesize = os.path.getsize("data/"+name)
+        # if(framesize > 200000):
+        #     print("not gray")
+        # else:
+        #     requests.get('http://localhost:3000/frameerror/2')
+        #     os.remove("data/"+name)
+        #     return False
         # sent = 1
         response=apidetect(name)
         detect=response.json()
@@ -439,8 +342,6 @@ def imagescan(frame, count,now):
                 prof = getprofile(identify[index][u'candidates'][0][u'personId'])
                 conf = prof['individual_confidence']
                 if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
-                # if(identify[index][u'candidates'][0][u'confidence'] > 0.55):
-
                     person=requests.get(uriPerson,  headers = header)
                     nameperson=person.json()[u'name']
                     mongodetect(now,now.strftime("%H:%M"),nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
@@ -450,9 +351,6 @@ def imagescan(frame, count,now):
                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                     requests.get('http://localhost:3000/walkoutalertbyid/'+nameperson)
                 else:
-                    # mongodetectlower5(now,now.strftime("%H:%M"), now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
-                    #     "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
-                    # infocrop(name_crop,now,"",0)
                     person=requests.get(uriPerson,  headers = header)
                     nameperson=person.json()[u'name']
                     infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])   
@@ -500,34 +398,18 @@ def imagescan(frame, count,now):
                         infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                     os.remove("data/"+name_crop)
             
-        os.remove("data/"+name)
+    os.remove("data/"+name)
 
 
-# now=datetime.now() + timedelta(hours=7)
-
-# current_time=now.strftime("%H%M%S")
-# print((int(t2(20,00).strftime("%H%M"))<int( (datetime.now() + timedelta(hours=7)).strftime("%H%M")) ))
-
-#print(int(t2(12, 30).strftime("%H%M")) > int(datetime.now().strftime("%H%M")))
 count1=1
-# executor = concurrent.futures.ThreadPoolExecutor(max_workers=8)
 while(True):
     cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.15:8554/stream0/out.h264")
     while(True):
-    # ##print("a")
-    
         ret, img=cap.read()
         timenow =datetime.now() + timedelta(hours=7)
         bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
         if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
-        #
-        # if (cv2.waitKey(20) & 0xFF == ord('q')):# if (cv2.waitKey(20) & 0xFF == ord('q')):
             break
-        # if (cv2.waitKey(20) & 0xFF == ord('q')) | (not ret):
-        #     break
-        # asyncio.run(imagescan(img, count1))
-        # executor.submit(asyncio.run(imagescan(img, count1)))
-        # executor.submit(imagescan(img, count1))
         else:
             if ret:
                 _thread.start_new_thread(imagescan, (img, count1,timenow))
@@ -543,5 +425,3 @@ while(True):
                 )
                 break
         count1=count1 + 1
-    # cap.release()
-    # cv2.destroyAllWindows()
