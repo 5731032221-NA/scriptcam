@@ -64,12 +64,15 @@ while(True):
     ret, img=cap.read()
     timenow =datetime.now() + timedelta(hours=7)
     bool1 = ((int(t2(6,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(18,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
-    if (cv2.waitKey(20) & 0xFF == ord('q')):
+    if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
         break
 
     if ret:
         _thread.start_new_thread(imagescan, (img, count1))
+    else: 
+        break
     count1=count1 + 1
+    
 
 
 cap.release()
