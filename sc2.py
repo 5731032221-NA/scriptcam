@@ -412,7 +412,8 @@ while(True):
             break
         else:
             if ret:
-                _thread.start_new_thread(imagescan, (img, count1,timenow))
+                imagescan(img, count1,timenow)
+                # _thread.start_new_thread(imagescan, (img, count1,timenow))
             else:
                 client = pymongo.MongoClient(
                     "mongodb://127.0.0.1:27017")
