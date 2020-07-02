@@ -87,7 +87,7 @@ def infocrop(name,now,detectname,confidence):
         "detected": detectname,
         "confidence": confidence,
         "train": '',
-        "camera": 1
+        "camera": 4
     }
     )
 
@@ -307,7 +307,7 @@ def getprofile(faceid):
 
 
 def imagescan(img, count,now):
-    if (count % 56) == 0:
+    if (count % 50) == 0:
         print("count",count)
         current_time=now.strftime("%H%M%S")
         name=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+".jpg"
