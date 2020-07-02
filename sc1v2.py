@@ -369,6 +369,7 @@ def getprofile(faceid):
 def imagescan(img, count,now):
     if (count % 36) == 0:
         print("count",count)
+        name=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+".jpg"
         cv2.imwrite("data/"+name, img)
         frame = cv2.imread("data/"+name)
         sent = 0
@@ -388,7 +389,6 @@ def imagescan(img, count,now):
                 # now=datetime.now() + timedelta(hours=7)
                 # today=date.today() + timedelta(hours=7)
                 current_time=now.strftime("%H%M%S")
-                name=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+".jpg"
                 # cv2.imwrite("data/"+name, frame)
 
                 storeblob(name)
