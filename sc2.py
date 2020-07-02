@@ -297,7 +297,7 @@ def imagescan(img, count,now):
     frame = cv2.imread("data/"+name)
     framesize = os.path.getsize("data/"+name)
     if(framesize > 200000):
-        print("not gray")
+        print("not gray",count)
     else:
         requests.get('http://localhost:3000/frameerror/1')
         os.remove("data/"+name)
