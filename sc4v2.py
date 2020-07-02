@@ -184,6 +184,7 @@ def getemo(emotion):
             emostr = 'surprise'
     return emostr
 
+
 def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
     today = now.strftime("%Y-%m-%d")
     client = pymongo.MongoClient(
@@ -192,48 +193,20 @@ def mongo(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_u
     emo = getemo(faceAttributes['emotion'])
     query = {"id": nameperson}
     queryy = db.checkin[today].find(query)
-    if(queryy.count() > 0):
-        newvalues = { "$set": { "checkout": checkin ,"checkoutEmotion": faceAttributes} }
+    
 
-    else:
+
+    if(queryy.count() > 0):
         db_default = client.mea
         query_default = {"id": nameperson}
         default_data = db_default.default.find_one(query_default)
         if(default_data['gender'] == faceAttributes['gender']):
-            db.checkin[today].update(
-            query,
-            {
-                "id": nameperson,
-                "checkin": checkin,
-                "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
-                # "checkinMonth": today.strftime("%Y-%m"),
-                "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
-                "checkinEmo": emo,
-                "checkinImageCrop": imageCropUrl,
-                "camerain": 1,
-                "checkout": "",
-                "checkoutEmotion": {"gender":"","age":0},
-                "checkoutEmo": "",
-                "checkoutImageCrop": "",
-                "cameraout": 0,
-                "checkoutdatetime": "",
-                # "checkoutMonth":""
-            },
-                upsert=True
-            )   
-            db.checkattendance.insert_one({
-            "id": nameperson,
-            "checkin": { "time": now.strftime("%H:%M:%S"),
-                        "emotion": { "gender": default_data['gender'], "age": faceAttributes['age'], "emotion": faceAttributes['emotion'] }
-            },
-            "checkout": { "time": "",
-                        "emotion": ""
-            },
-            "Date":  now.strftime("%Y-%m-%d"),
-            # "faceAttributes": faceAttributes
-            }
-            )
-            # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
+            newvalues = { "$set": { "cameraout": 4,"checkout": checkin ,"checkoutEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },"checkoutEmo": emo, "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
+            db.checkin[today].update_one(query, newvalues)
+
+            db.checkattendance.update_one(query, { "$set": {"checkout": { "time": now.strftime("%H:%M:%S"),
+                        "emotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] }
+            }} }) 
 
 def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
     today = now.strftime("%Y-%m-%d")
@@ -241,59 +214,31 @@ def mongo2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUr
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
     db = client.checkin
-    # emo = getemo(faceAttributes['emotion'])
     query = {"id": nameperson}
     queryy = db.checkin[today].find(query)
-    if(queryy.count() > 0):
-        newvalues = { "$set": { "checkout": checkin } }
 
-    else:
+    
+
+
+    if(queryy.count() > 0):
         db_default = client.mea
         query_default = {"id": nameperson}
         default_data = db_default.default.find_one(query_default)
-        # print(default_data)
-        db.checkin[today].update(
-        query,
-        {
-            "id": nameperson,
-            "checkin": checkin,
-            "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
-            # "checkinMonth": today.strftime("%Y-%m"),
-            "checkinEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
-            "checkinEmo": "neutral",
-            "checkinImageCrop": imageCropUrl,
-            "camerain": 1,
-            "checkout": "",
-            "checkoutEmotion": {"gender":"","age":0},
-            "checkoutEmo": "",
-            "checkoutImageCrop": "",
-            "cameraout": 0,
-            "checkoutdatetime": "",
-            # "checkoutMonth":""
-        },
-            upsert=True
-        )   
+        
+        newvalues = { "$set": { "cameraout": 4,"checkout": checkin ,"checkoutEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },"checkoutEmo": "neutral", "checkoutImageCrop": imageCropUrl , "checkoutdatetime": now.strftime("%Y%m%d%H%M%S")} }
+        db.checkin[today].update_one(query, newvalues)
 
-        db.checkattendance.insert_one({
-        "id": nameperson,
-        "checkin": { "time": now.strftime("%H:%M:%S"),
-                     "emotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
-        },
-        "checkout": { "time": "",
-                     "emotion": ""
-        },
-        "Date":  now.strftime("%Y-%m-%d"),
-        "faceAttributes": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
-        }
-        )
-        # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
+        db.checkattendance.update_one(query, { "$set": {"checkout": { "time": now.strftime("%H:%M:%S"),
+                    "emotion": "neutral"
+        }} }) 
+
 
 def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, image_url, imageCropUrl):
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
     today = now.strftime("%Y-%m-%d")
     emo = getemo(faceAttributes['emotion'])
-    query = {"id": nameperson,"camerain":1}
+    query = {"id": nameperson,"cameraout":4}
     db2 = client.detect
     db_default = client.mea
     query_default = {"id": nameperson}
@@ -303,31 +248,28 @@ def mongodetect(now,timei, nameperson, checkin, faceAttributes, faceRectangle, i
             query,
             {
                 "id": nameperson,
-                "checkin": checkin,
-                "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
-                # "checkinMonth": today.strftime("%Y-%m"),
-                "checkinEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
+                "checkin": "",
+                "checkindatetime": "",
+                "checkinEmotion": {"gender":"","age":0},
                 "checkinEmo": emo,
-                "checkinImageCrop": imageCropUrl,
-                "camerain": 1,
-                "checkout": "",
-                "checkoutEmotion": {"gender":"","age":0},
-                "checkoutEmo": "",
-                "checkoutImageCrop": "",
-                "cameraout": 0,
-                "checkoutdatetime": "",
-                # "checkoutMonth":""
+                "checkinImageCrop": "",
+                "camerain": 0,
+                "checkout": checkin,
+                "checkoutEmotion": { "gender": default_data['gender'], "age": faceAttributes['age']+ int(default_data['margin']), "emotion": faceAttributes['emotion'] },
+                "checkoutEmo": emo,
+                "checkoutImageCrop": imageCropUrl,
+                "cameraout": 4,
+                "checkoutdatetime": now.strftime("%Y%m%d%H%M%S"),
             },
                 upsert=True
-            ) 
-        
+            )   
     
 def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, imageCropUrl):
     client = pymongo.MongoClient(
             "mongodb://127.0.0.1:27017")
     today = now.strftime("%Y-%m-%d")
     year_today = int(now.strftime("%Y"))
-    query = {"id": nameperson,"camerain":1}
+    query = {"id": nameperson,"cameraout":4}
     db2 = client.detect
     db_default = client.mea
     query_default = {"id": nameperson}
@@ -336,20 +278,18 @@ def mongodetect2(now,timei, nameperson, checkin, faceRectangle, image_url, image
     query,
     {
         "id": nameperson,
-        "checkin": checkin,
-        "checkindatetime": now.strftime("%Y%m%d%H%M%S"),
-        # "checkinMonth": today.strftime("%Y-%m"),
-        "checkinEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
-        "checkinEmo": "neutral",
-        "checkinImageCrop": imageCropUrl,
-        "camerain": 1,
-        "checkout": "",
-        "checkoutEmotion": {"gender":"","age":0},
-        "checkoutEmo": "",
-        "checkoutImageCrop": "",
-        "cameraout": 0,
-        "checkoutdatetime": "",
-        # "checkoutMonth":""
+        "checkin": "",
+        "checkindatetime": "",
+        "checkinEmotion": {"gender":"","age":0},
+        "checkinEmo": "",
+        "checkinImageCrop": "",
+        "camerain": 0,
+        "checkout": checkin,
+        "checkoutEmotion": { "gender": default_data['gender'], "age": (year_today - 1958 - int(default_data['year'])) + int(default_data['margin']), "emotion": { "anger": 0, "contempt": 0, "disgust": 0, "fear": 0, "happiness": 0, "neutral": 1, "sadness": 0, "surprise": 0 } },
+        "checkoutEmo": "neutral",
+        "checkoutImageCrop": imageCropUrl,
+        "cameraout": 4,
+        "checkoutdatetime": now.strftime("%Y%m%d%H%M%S"),
     },
         upsert=True
     )
@@ -370,14 +310,14 @@ def imagescan(img, count,now):
     if (count % 36) == 0:
         print("count",count)
         current_time=now.strftime("%H%M%S")
-        name=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+".jpg"
+        name=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+".jpg"
         cv2.imwrite("data/"+name, img)
         frame = cv2.imread("data/"+name)
         framesize = os.path.getsize("data/"+name)
         if(framesize > 200000):
             print("not gray",count)
         else:
-            requests.get('http://localhost:3000/frameerror/1')
+            requests.get('http://localhost:3000/frameerror/2')
             os.remove("data/"+name)
             return False
         sent = 0
@@ -417,7 +357,7 @@ def imagescan(img, count,now):
                         header={'Ocp-Apim-Subscription-Key': subscription_key}
                         crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                             3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                        name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+str(index)+"-crop.jpg"
+                        name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                         cv2.imwrite("data/"+name_crop, crop_img)
                         storecrop(name_crop,now)
                         prof = getprofile(identify[index][u'candidates'][0][u'personId'])
@@ -458,7 +398,7 @@ def imagescan(img, count,now):
                             header={'Ocp-Apim-Subscription-Key': subscription_key}
                             crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                                 3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                            name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+str(index)+"-crop.jpg"
+                            name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop,now)
                             prof = getprofile(identify[index][u'candidates'][0][u'personId'])
@@ -496,7 +436,7 @@ def imagescan(img, count,now):
                     # now=datetime.now() + timedelta(hours=7)
                 # today=date.today() + timedelta(hours=7)
                     current_time=now.strftime("%H%M%S")
-                    name=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+".jpg"
+                    name=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+".jpg"
                     # cv2.imwrite("data/"+name, frame)
 
                     storeblob(name)
@@ -524,7 +464,7 @@ def imagescan(img, count,now):
                             header={'Ocp-Apim-Subscription-Key': subscription_key}
                             crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                                 3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                            name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+str(index)+"-crop.jpg"
+                            name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                             cv2.imwrite("data/"+name_crop, crop_img)
                             storecrop(name_crop,now)
                             prof = getprofile(identify[index][u'candidates'][0][u'personId'])
@@ -567,7 +507,7 @@ def imagescan(img, count,now):
                                 header={'Ocp-Apim-Subscription-Key': subscription_key}
                                 crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                                     3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
-                                name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+str(index)+"-crop.jpg"
+                                name_crop=now.strftime("%Y-%m-%d")+"-4-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                                 cv2.imwrite("data/"+name_crop, crop_img)
                                 storecrop(name_crop,now)
                                 prof = getprofile(identify[index][u'candidates'][0][u'personId'])
@@ -604,7 +544,7 @@ count1=1
 print("new running")
 while(True):
     print("connect camera...")
-    cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
+    cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.17:8554/stream0/out.h264")
     while(True):
         ret, img=cap.read()
         timenow =datetime.now() + timedelta(hours=7)
@@ -624,7 +564,7 @@ while(True):
                 errdate = (datetime.now() + timedelta(hours=7))
                 db2.python[errdate.strftime("%Y-%m-%d")].insert_one({
                     "datetime": errdate.strftime("%Y%m%d%H%M%S"),
-                    "message": "Camera 1 not avaliable"
+                    "message": "Camera 4 not avaliable"
                 }
                 )
                 break
