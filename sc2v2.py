@@ -307,7 +307,7 @@ def getprofile(faceid):
 
 
 def imagescan(img, count,now):
-    if (count % 50) == 0:
+    if (count % 56) == 0:
         print("count",count)
         current_time=now.strftime("%H%M%S")
         name=now.strftime("%Y-%m-%d")+"-2-"+current_time+str(count%60)+".jpg"
