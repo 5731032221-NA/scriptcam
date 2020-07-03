@@ -317,6 +317,7 @@ def imagescan(img, count,now):
         if(framesize > 200000):
             print("not gray",count)
         else:
+            storeblob(name)
             requests.get('http://localhost:3000/frameerror/2')
             os.remove("data/"+name)
             return False
