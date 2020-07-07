@@ -33,7 +33,7 @@ blob_service_client = BlobServiceClient.from_connection_string(
 # Create a unique name for the container
 container_name = "facedetection"
 
-net = cv2.dnn.readNetFromDarknet('./yolov3-2.cfg', './yolov3.weights')
+
 
 def storeblob(name):
     print(name)
@@ -486,6 +486,7 @@ print("new running")
 while(True):
     print("connect camera...")
     cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
+    net = cv2.dnn.readNetFromDarknet('./yolov3-2.cfg', './yolov3.weights')
     while(True):
         ret, img=cap.read()
         timenow =datetime.now() + timedelta(hours=7)
