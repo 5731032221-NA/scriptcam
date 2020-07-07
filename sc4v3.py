@@ -331,11 +331,10 @@ def imagescan(img, count,now):
                 scores = detection[5:]
                 classID = np.argmax(scores)
                 confidence = scores[classID]
-                if((classID == 0) & (confidence>0.3)):
+                if((classID == 0) & (confidence>0.5)):
                     find = True
         if(find):
             storeblob(name)
-            sent = 1
             response=apidetect(name)
             detect=response.json()
             print("detect1",detect)
@@ -438,8 +437,8 @@ while(True):
         bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
         # bool1 = True
         # bool1 = False
-        # if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
-        if ((cv2.waitKey(20) & 0xFF == ord('q'))):
+        if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
+        # if ((cv2.waitKey(20) & 0xFF == ord('q'))):
             break
         else:
             if ret:
