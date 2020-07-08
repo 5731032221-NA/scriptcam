@@ -44,7 +44,7 @@ def storeblob(name):
     print(name)
     blob_client = blob_service_client.get_blob_client(
                 container=container_name, blob=name)
-    with open("data/"+name, "rb") as data:
+    with open("datadebug1/"+name, "rb") as data:
         blob_client.upload_blob(data) 
 
 
@@ -56,7 +56,7 @@ def imagescan(frame, count):
         current_time=now.strftime("%H%M%S")
         name="test"+str(today)+"-1-"+current_time+".jpg"
         print("count",count)
-        cv2.imwrite("data/"+name, frame)
+        cv2.imwrite("datadebug1/"+name, frame)
         storeblob(name)
 
 count1=1

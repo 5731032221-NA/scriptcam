@@ -41,7 +41,7 @@ def storeblob(name):
     print(name)
     blob_client = blob_service_client.get_blob_client(
                 container=container_name, blob=name)
-    with open("data/"+name, "rb") as data:
+    with open("data1/"+name, "rb") as data:
         blob_client.upload_blob(data) 
 
 def encrypt_val(clear_text):
@@ -53,7 +53,7 @@ def encrypt_val(clear_text):
     return base64.b64encode( iv + cipher.encrypt( raw ) ) 
 
 def storecrop(name,now):
-    jpgfile = Image.open("data/"+name)
+    jpgfile = Image.open("data1/"+name)
     buffered = BytesIO()
     jpgfile.save(buffered, format="JPEG")
     img_b = base64.b64encode(buffered.getvalue())
@@ -370,15 +370,15 @@ def imagescan(img, count,now):
         print("count",count)
         current_time=now.strftime("%H%M%S")
         name=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+".jpg"
-        cv2.imwrite("data/"+name, img)
-        frame = cv2.imread("data/"+name)
-        framesize = os.path.getsize("data/"+name)
+        cv2.imwrite("data1/"+name, img)
+        frame = cv2.imread("data1/"+name)
+        framesize = os.path.getsize("data1/"+name)
         if(framesize > 200000):
             print("not gray",count)
         else:
             storeblob(name)
             requests.get('http://localhost:3000/frameerror/1')
-            os.remove("data/"+name)
+            os.remove("data1/"+name)
             return False
         find = False
         blob = cv2.dnn.blobFromImage(frame, 1 / 255.0, (416, 416),swapRB=True, crop=False)
@@ -395,7 +395,7 @@ def imagescan(img, count,now):
                     countperson = countperson + 1
         print("countperson",countperson)
         if(countperson >5):
-            frame = cv2.imread("data/"+name)
+            frame = cv2.imread("data1/"+name)
             find = False
             blob = cv2.dnn.blobFromImage(frame, 1 / 255.0, (416, 416),swapRB=True, crop=False)
             net.setInput(blob)
@@ -429,7 +429,7 @@ def imagescan(img, count,now):
                     crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                         3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
                     name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+str(index)+"-crop.jpg"
-                    cv2.imwrite("data/"+name_crop, crop_img)
+                    cv2.imwrite("data1/"+name_crop, crop_img)
                     storecrop(name_crop,now)
                     print(identify)
                     prof = getprofile(identify[index][u'candidates'][0][u'personId'])
@@ -453,7 +453,7 @@ def imagescan(img, count,now):
                         person=requests.get(uriPerson,  headers = header)
                         nameperson=person.json()[u'name']
                         infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
-                    os.remove("data/"+name_crop)
+                    os.remove("data1/"+name_crop)
             else:
                 response=apidetect2(name)
                 detect=response.json()
@@ -472,7 +472,7 @@ def imagescan(img, count,now):
                         crop_img=frame[list(detect[index][u'faceRectangle'].values())[0]: (list(detect[index][u'faceRectangle'].values())[0] + list(detect[index][u'faceRectangle'].values())[
                                             3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
                         name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+str(index)+"-crop.jpg"
-                        cv2.imwrite("data/"+name_crop, crop_img)
+                        cv2.imwrite("data1/"+name_crop, crop_img)
                         storecrop(name_crop,now)
                         print(identify)
                         prof = getprofile(identify[index][u'candidates'][0][u'personId'])
@@ -495,11 +495,11 @@ def imagescan(img, count,now):
                             person=requests.get(uriPerson,  headers = header)
                             nameperson=person.json()[u'name']
                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])  
-                        os.remove("data/"+name_crop)
+                        os.remove("data1/"+name_crop)
 
-            # os.remove("data/"+name)
+            # os.remove("data1/"+name)
             print("done1")
-        os.remove("data/"+name)
+        os.remove("data1/"+name)
         print("done",count)
 
       
