@@ -505,7 +505,6 @@ def imagescan(img, count,now):
                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])  
                         os.remove("data/"+name_crop)
 
-            os.remove("data/"+name)
         os.remove("data/"+name)
         print("done",count)
 
