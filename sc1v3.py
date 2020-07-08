@@ -391,6 +391,7 @@ def imagescan(img, count,now):
                 confidence = scores[classID]
                 if((classID == 0) & (confidence>0.5)):
                     find = True
+                    print(confidence)
         print(find)
         if(find):
             storeblob(name)
