@@ -393,8 +393,23 @@ def imagescan(img, count,now):
                 if((classID == 0) & (confidence>0.5)):
                     find = True
                     countperson = countperson + 1
-                    print(confidence)
         print("countperson",countperson)
+        if(countperson >5):
+            frame = cv2.imread("data/"+name)
+            find = False
+            blob = cv2.dnn.blobFromImage(frame, 1 / 255.0, (416, 416),swapRB=True, crop=False)
+            net.setInput(blob)
+            layerOutputs = net.forward(ln)
+            countperson = 0
+            for output in layerOutputs:
+                for detection in output:
+                    scores = detection[5:]
+                    classID = np.argmax(scores)
+                    confidence = scores[classID]
+                    if((classID == 0) & (confidence>0.5)):
+                        find = True
+                        countperson = countperson + 1
+            print("countperson2",countperson)
         if(find & (countperson <6)):
             storeblob(name)
             response=apidetect(name)
