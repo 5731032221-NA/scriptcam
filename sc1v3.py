@@ -431,7 +431,9 @@ def imagescan(img, count,now):
                     name_crop=now.strftime("%Y-%m-%d")+"-1-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                     cv2.imwrite("data/"+name_crop, crop_img)
                     storecrop(name_crop,now)
+                    print(identify)
                     prof = getprofile(identify[index][u'candidates'][0][u'personId'])
+                    print(prof)
                     conf = prof['individual_confidence']
                     if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
 
