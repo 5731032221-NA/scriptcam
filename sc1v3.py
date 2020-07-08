@@ -436,9 +436,10 @@ def imagescan(img, count,now):
                     print(prof)
                     conf = prof['individual_confidence']
                     if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
-
-                        person=requests.get(uriPerson,  headers = header)
-                        nameperson=person.json()[u'name']
+                        nameperson=prof['id']
+                        print(nameperson)
+                        # person=requests.get(uriPerson,  headers = header)
+                        # nameperson=person.json()[u'name']
                         mongodetect(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
                             "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                         
@@ -450,8 +451,9 @@ def imagescan(img, count,now):
                         requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                         # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                     else:
-                        person=requests.get(uriPerson,  headers = header)
-                        nameperson=person.json()[u'name']
+                        nameperson=prof['id']
+                        # person=requests.get(uriPerson,  headers = header)
+                        # nameperson=person.json()[u'name']
                         infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                     os.remove("data1/"+name_crop)
             else:
@@ -479,8 +481,8 @@ def imagescan(img, count,now):
                         print(prof)
                         conf = prof['individual_confidence']
                         if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
-                            person=requests.get(uriPerson,  headers = header)
-                            nameperson=person.json()[u'name']
+                            nameperson=prof['id']
+                            print(nameperson)
                             mongodetect2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                 "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                             # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceAttributes'], detect[index][u'faceRectangle'], (
@@ -492,8 +494,9 @@ def imagescan(img, count,now):
                             # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                         else:
                             # infocrop(name_crop,now,"",0)
-                            person=requests.get(uriPerson,  headers = header)
-                            nameperson=person.json()[u'name']
+                            # person=requests.get(uriPerson,  headers = header)
+                            # nameperson=person.json()[u'name']
+                            nameperson=prof['id']
                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence'])  
                         os.remove("data1/"+name_crop)
 
@@ -511,7 +514,7 @@ while(True):
     while(True):
         ret, img=cap.read()
         timenow =datetime.now() + timedelta(hours=7)
-        bool1 = ((int(t2(5,00).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
+        bool1 = ((int(t2(5,30).strftime("%H%M"))<int( (timenow).strftime("%H%M")) ) & (int(t2(20,00).strftime("%H%M"))>int( (timenow).strftime("%H%M")) )  ) & ((timenow).weekday() < 5)
         # bool1 = True
         # bool1 = False
         if ((cv2.waitKey(20) & 0xFF == ord('q')) | (not bool1)):
