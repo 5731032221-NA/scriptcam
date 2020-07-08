@@ -34,6 +34,8 @@ blob_service_client = BlobServiceClient.from_connection_string(
 container_name = "facedetection"
 
 net = cv2.dnn.readNetFromDarknet('./yolov3-2.cfg', './yolov3.weights')
+ln = net.getLayerNames()
+ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
 def storeblob(name):
     print(name)
@@ -379,9 +381,6 @@ def imagescan(img, count,now):
             os.remove("data/"+name)
             return False
         find = False
-        (H, W) = frame.shape[:2]
-        ln = net.getLayerNames()
-        ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
         blob = cv2.dnn.blobFromImage(frame, 1 / 255.0, (416, 416),swapRB=True, crop=False)
         net.setInput(blob)
         layerOutputs = net.forward(ln)
@@ -392,6 +391,7 @@ def imagescan(img, count,now):
                 confidence = scores[classID]
                 if((classID == 0) & (confidence>0.5)):
                     find = True
+        print(find)
         if(find):
             storeblob(name)
             response=apidetect(name)
