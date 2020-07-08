@@ -384,6 +384,7 @@ def imagescan(img, count,now):
         blob = cv2.dnn.blobFromImage(frame, 1 / 255.0, (416, 416),swapRB=True, crop=False)
         net.setInput(blob)
         layerOutputs = net.forward(ln)
+        countperson = 0
         for output in layerOutputs:
             for detection in output:
                 scores = detection[5:]
@@ -391,9 +392,10 @@ def imagescan(img, count,now):
                 confidence = scores[classID]
                 if((classID == 0) & (confidence>0.5)):
                     find = True
+                    countperson = countperson + 1
                     print(confidence)
-        print(find)
-        if(find):
+        print("countperson",countperson)
+        if(find & (countperson <6)):
             storeblob(name)
             response=apidetect(name)
             detect=response.json()
