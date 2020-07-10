@@ -444,7 +444,6 @@ def imagescan(img, count,now):
                     name_crop=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                     cv2.imwrite("data3/"+name_crop, crop_img)
                     storecrop(name_crop,now)
-                    
                     prof = getprofile(identify[index][u'candidates'][0][u'personId'])
                     conf = prof['individual_confidence']
                     if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
@@ -485,6 +484,7 @@ def imagescan(img, count,now):
                                             3]), list(detect[index][u'faceRectangle'].values())[1]:(list(detect[index][u'faceRectangle'].values())[1] + list(detect[index][u'faceRectangle'].values())[2])]
                         name_crop=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+str(index)+"-crop.jpg"
                         cv2.imwrite("data3/"+name_crop, crop_img)
+                        storecrop(name_crop,now)
                         prof = getprofile(identify[index][u'candidates'][0][u'personId'])
                         conf = prof['individual_confidence']
                         if(identify[index][u'candidates'][0][u'confidence'] > float(conf)):
@@ -526,7 +526,8 @@ while(True):
             break
         else:
             if ret:
-                _thread.start_new_thread(imagescan, (img, count1,timenow))
+                # _thread.start_new_thread(imagescan, (img, count1,timenow))
+                imagescan(img, count1,timenow)
             else:
                 print("camera err.")
                 client = pymongo.MongoClient(
