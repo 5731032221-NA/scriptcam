@@ -68,7 +68,8 @@ def storecrop(name,now):
     db = client.image
     db.crop.insert_one({
         "name": name,
-        "data": img_enc_str
+        "data": img_enc_str,
+        "date": now.strftime("%Y-%m-%d")
     }
     )
 
