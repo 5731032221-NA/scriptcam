@@ -39,16 +39,16 @@ blob_service_client = BlobServiceClient.from_connection_string(
 # Create a unique name for the container
 container_name = "facedetection"
 
-net = cv2.dnn.readNetFromDarknet('./yolov3-2.cfg', './yolov3.weights')
+net = cv2.dnn.readNetFromDarknet('./yolov3-face.cfg', './yolov3-wider_16000.weights')
 ln = net.getLayerNames()
 ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
-def storeblob(name):
-    print(name)
-    blob_client = blob_service_client.get_blob_client(
-                container=container_name, blob=name)
-    with open("data3/"+name, "rb") as data:
-        blob_client.upload_blob(data) 
+# def storeblob(name):
+#     print(name)
+#     blob_client = blob_service_client.get_blob_client(
+#                 container=container_name, blob=name)
+#     with open("data3/"+name, "rb") as data:
+#         blob_client.upload_blob(data) 
 
 def encrypt_val(clear_text):
     master_key = b'meafacialkeycam1' 
@@ -107,11 +107,11 @@ def apiidentify(name, arrfaceid):
         arrfaceid)+',"confidenceThreshold": 0.1, "maxNumOfCandidatesReturned": 1 }')
     return requests.post(identify_url,  headers=header, json=paramsIden)
 
-def apidetect(name):
+def apidetect(img):
     face_api_url = 'https://meafacedetection.cognitiveservices.azure.com/face/v1.0/detect'
 
-    image_url = "https://oneteamblob.blob.core.windows.net/facedetection/"+name
-    headers = {'Ocp-Apim-Subscription-Key': subscription_key}
+#     image_url = "https://oneteamblob.blob.core.windows.net/facedetection/"+name
+    headers = {'Content-Type': 'application/octet-stream','Ocp-Apim-Subscription-Key': subscription_key}
 
     params = {
         'returnFaceId': 'true',
@@ -119,15 +119,14 @@ def apidetect(name):
         'returnFaceAttributes': 'emotion,gender,age,blur',
         
     }
-    return requests.post(
-        face_api_url, params=params, headers=headers, json={"url": image_url})
+    return requests.post(face_api_url, params=params, headers=headers, data=img)
 
 
-def apidetect2(name):
+def apidetect2(img):
     face_api_url = 'https://meafacedetection.cognitiveservices.azure.com/face/v1.0/detect'
 
-    image_url = "https://oneteamblob.blob.core.windows.net/facedetection/"+name
-    headers = {'Ocp-Apim-Subscription-Key': subscription_key}
+#     image_url = "https://oneteamblob.blob.core.windows.net/facedetection/"+name
+    headers = {'Content-Type': 'application/octet-stream','Ocp-Apim-Subscription-Key': subscription_key}
 
     params = {
         'returnFaceId': 'true',
@@ -135,8 +134,8 @@ def apidetect2(name):
         # 'returnFaceAttributes': 'emotion,gender,age,blur',
         'detectionModel': 'detection_02',
     }
-    return requests.post(
-        face_api_url, params=params, headers=headers, json={"url": image_url})
+    return requests.post(face_api_url, params=params, headers=headers, data=img)
+    
 
 def getemo(emotion):
     maxProp = ''
@@ -402,14 +401,14 @@ def imagescan(img, count,now):
         name=now.strftime("%Y-%m-%d")+"-3-"+current_time+str(count%60)+".jpg"
         cv2.imwrite("data3/"+name, img)
         frame = cv2.imread("data3/"+name)
-        framesize = os.path.getsize("data3/"+name)
-        if(framesize > 200000):
-            print("not gray",count)
-        else:
-            storeblob(name)
-            requests.get('http://localhost:3000/frameerror/3')
-            os.remove("data3/"+name)
-            return False
+        # framesize = os.path.getsize("data3/"+name)
+        # if(framesize > 200000):
+        #     print("not gray",count)
+        # else:
+        #     storeblob(name)
+        #     requests.get('http://localhost:3000/frameerror/3')
+        #     os.remove("data3/"+name)
+        #     return False
         find = False
         blob = cv2.dnn.blobFromImage(frame, 1 / 255.0, (416, 416),swapRB=True, crop=False)
         net.setInput(blob)
@@ -426,8 +425,10 @@ def imagescan(img, count,now):
                     print(confidence)
         print("countperson",countperson)
         if(find & (countperson <6)):
-            storeblob(name)
-            response=apidetect(name)
+            # storeblob(name)
+            bitimage = open("data/"+name, 'rb').read()
+            response=apidetect(bitimage)
+            # response=apidetect(name)
             detect=response.json()
             if(detect != []):
                 arrfaceid=[]
@@ -467,7 +468,7 @@ def imagescan(img, count,now):
                         infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
                     os.remove("data3/"+name_crop)
             else:
-                response=apidetect2(name)
+                response=apidetect2(bitimage)
                 detect=response.json()
                 
                 if(detect != []):
