@@ -44,7 +44,7 @@ def storeblob(name):
     print(name)
     blob_client = blob_service_client.get_blob_client(
                 container=container_name, blob=name)
-    with open("data/"+name, "rb") as data:
+    with open("data3/"+name, "rb") as data:
         blob_client.upload_blob(data) 
 
 def encrypt_val(clear_text):

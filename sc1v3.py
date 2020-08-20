@@ -411,7 +411,7 @@ def imagescan(img, count,now):
             print("countperson2",countperson)
         if(find & (countperson <6)):
             # storeblob(name)
-            bitimage = open("data/"+name, 'rb').read()
+            bitimage = open("data1/"+name, 'rb').read()
             response=apidetect(bitimage)
             detect=response.json()
             print("detect1",detect)
