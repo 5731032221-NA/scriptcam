@@ -510,7 +510,7 @@ count1=1
 print("new running")
 while(True):
     print("connect camera...")
-    cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.18:8554/stream0/out.h264")
+    cap = cv2.VideoCapture("rtsp://admin:admin@10.76.53.14:8554/stream0/out.h264")
     while(True):
         ret, img=cap.read()
         timenow =datetime.now() + timedelta(hours=7)
