@@ -371,7 +371,7 @@ def imagescan(img, count,now):
                         # mongo(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                     #      "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                         infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
-                        requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
+                        requests.get('http://localhost:3000/walkoutalertbyid/'+nameperson)
                         # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                     else:
                         # person=requests.get(uriPerson,  headers = header)
@@ -412,7 +412,7 @@ def imagescan(img, count,now):
                             mongo2(now,now.strftime("%H:%M"), nameperson, now.strftime("%H:%M"), detect[index][u'faceRectangle'], (
                                 "https://oneteamblob.blob.core.windows.net/facedetection/"+name), name_crop)
                             infocrop(name_crop,now,nameperson,identify[index][u'candidates'][0][u'confidence']) 
-                            requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
+                            requests.get('http://localhost:3000/walkoutalertbyid/'+nameperson)
                             # requests.get('http://localhost:3000/walkinalertbyid/'+nameperson)
                         else:
                             # infocrop(name_crop,now,"",0)
